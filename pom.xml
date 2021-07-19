@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>framework</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<name>InFormALin Framework</name>
+	<url>https://github.com/InFormALin/Framework</url>
+
+	<repositories>
+		<repository>
+			<id>github</id>
+			<name>GitHub InFormALin-Parent Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/InFormALin/maven-parent</url>
+		</repository>
+	</repositories>
+
+	<parent>
+		<groupId>edu.kit.kastel.informalin</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.2-SNAPSHOT</version>
+	</parent>
+
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub InFormALin-Parent Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/InFormALin/Framework</url>
+		</repository>
+		<snapshotRepository>
+			<id>github</id>
+			<name>GitHub InFormALin-Parent Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/InFormALin/Framework</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<issueManagement>
+		<url>https://github.com/InFormALin/Framework/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+</project>
