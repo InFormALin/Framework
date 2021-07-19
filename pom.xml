@@ -40,4 +40,10 @@
 		<system>GitHub Issues</system>
 	</issueManagement>
 
+	<properties>
+		<sonar.projectKey>InFormALin_Framework</sonar.projectKey>
+		<sonar.organization>informalin</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+	</properties>
+
 </project>
