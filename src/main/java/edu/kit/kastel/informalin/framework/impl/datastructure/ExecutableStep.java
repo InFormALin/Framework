@@ -12,4 +12,14 @@ public class ExecutableStep implements IExecutableStep {
         throw new UnsupportedOperationException("NIY");
     }
 
+    @Override
+    public void init() {
+        throw new UnsupportedOperationException("NIY");
+    }
+
+    @Override
+    public void deinit() {
+        throw new UnsupportedOperationException("NIY");
+    }
+
 }

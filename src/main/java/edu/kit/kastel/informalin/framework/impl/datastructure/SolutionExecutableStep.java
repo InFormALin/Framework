@@ -13,4 +13,14 @@ public class SolutionExecutableStep implements IExecutableStep {
     public ImmutableList<IAgent> getAgents() {
         throw new UnsupportedOperationException("NIY");
     }
+
+    @Override
+    public void init() {
+        throw new UnsupportedOperationException("NIY");
+    }
+
+    @Override
+    public void deinit() {
+        throw new UnsupportedOperationException("NIY");
+    }
 }

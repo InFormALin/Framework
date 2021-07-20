@@ -4,4 +4,8 @@ import org.eclipse.collections.api.list.ImmutableList;
 
 public interface IExecutableStep {
     ImmutableList<IAgent> getAgents();
+
+    void init();
+
+    void deinit();
 }
