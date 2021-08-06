@@ -52,6 +52,12 @@
 			<artifactId>apache-jena-libs</artifactId>
 			<type>pom</type>
 		</dependency>
+		<!-- TODO Move to Parent -->
+		<dependency>
+			<groupId>edu.kit.kastel.informalin</groupId>
+			<artifactId>ontology-connector</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 </project>

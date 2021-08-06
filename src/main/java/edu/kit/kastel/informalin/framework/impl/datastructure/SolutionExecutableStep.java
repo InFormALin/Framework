@@ -11,6 +11,7 @@ public class SolutionExecutableStep implements IExecutableStep {
 
     @Override
     public ImmutableList<IAgent> getAgents() {
+        // TODO how to get agents from solutions? shall we define a wrapper agent?
         throw new UnsupportedOperationException("NIY");
     }
 
