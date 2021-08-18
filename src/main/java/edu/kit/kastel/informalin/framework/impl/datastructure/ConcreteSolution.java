@@ -6,9 +6,9 @@ import java.util.Objects;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 
-import edu.kit.kastel.informalin.framework.definition.connector.IDataProxy;
 import edu.kit.kastel.informalin.framework.definition.datastructure.IExecutableStep;
 import edu.kit.kastel.informalin.framework.definition.datastructure.ISolution;
+import edu.kit.kastel.informalin.framework.definition.datastructure.connector.IDataBlackboard;
 import edu.kit.kastel.informalin.framework.definition.exec.IExecutionService;
 
 public class ConcreteSolution implements ISolution {
@@ -21,11 +21,11 @@ public class ConcreteSolution implements ISolution {
     }
 
     @Override
-    public void invoke(IDataProxy blackboard) {
+    public void invoke(IDataBlackboard blackboard) {
         steps.forEach(IExecutableStep::init);
 
         for (IExecutableStep step : steps) {
-            this.executor.invoke(step, blackboard);
+            executor.invoke(step, blackboard);
         }
 
         steps.forEach(IExecutableStep::deinit);

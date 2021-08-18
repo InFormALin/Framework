@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.Objects;
 
-import edu.kit.kastel.informalin.framework.definition.connector.IDataProxy;
+import edu.kit.kastel.informalin.framework.definition.datastructure.connector.IDataProxy;
 import edu.kit.kastel.informalin.ontology.OntologyConnector;
 
 public abstract class OntologyDataProxy implements IDataProxy {

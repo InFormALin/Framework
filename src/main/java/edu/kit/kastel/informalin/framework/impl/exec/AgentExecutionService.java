@@ -5,9 +5,9 @@ import java.util.Random;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.eclipse.collections.api.list.MutableList;
 
-import edu.kit.kastel.informalin.framework.definition.connector.IDataProxy;
 import edu.kit.kastel.informalin.framework.definition.datastructure.IAgent;
 import edu.kit.kastel.informalin.framework.definition.datastructure.IExecutableStep;
+import edu.kit.kastel.informalin.framework.definition.datastructure.connector.IDataBlackboard;
 import edu.kit.kastel.informalin.framework.definition.exec.IExecutionService;
 
 public class AgentExecutionService implements IExecutionService {
@@ -35,7 +35,7 @@ public class AgentExecutionService implements IExecutionService {
     }
 
     @Override
-    public void invoke(IExecutableStep step, IDataProxy blackboard) {
+    public void invoke(IExecutableStep step, IDataBlackboard blackboard) {
         for (int round = 0; round < rounds; round++) {
             ImmutableList<IAgent> agents = shuffle ? shuffle(step.getAgents()) : step.getAgents();
 

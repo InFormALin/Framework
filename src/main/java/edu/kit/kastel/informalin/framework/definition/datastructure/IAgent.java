@@ -1,9 +1,12 @@
 package edu.kit.kastel.informalin.framework.definition.datastructure;
 
-import edu.kit.kastel.informalin.framework.definition.connector.IDataProxy;
+import edu.kit.kastel.informalin.framework.definition.datastructure.connector.IDataBlackboard;
 
 public interface IAgent {
 
-    void invoke(IDataProxy blackboard);
+    void invoke(IDataBlackboard blackboard);
 
+    void init();
+
+    void deinit();
 }
