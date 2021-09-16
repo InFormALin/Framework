@@ -11,11 +11,11 @@ import edu.kit.kastel.informalin.framework.definition.datastructure.ISolution;
 import edu.kit.kastel.informalin.framework.definition.datastructure.connector.IDataBlackboard;
 import edu.kit.kastel.informalin.framework.definition.exec.IExecutionService;
 
-public class ConcreteSolution implements ISolution {
+public abstract class ConcreteSolution implements ISolution {
     private ImmutableList<IExecutableStep> steps;
     private IExecutionService executor;
 
-    public ConcreteSolution(List<IExecutableStep> steps, IExecutionService executor) {
+    protected ConcreteSolution(List<IExecutableStep> steps, IExecutionService executor) {
         this.steps = Lists.immutable.withAll(steps);
         this.executor = Objects.requireNonNull(executor);
     }
