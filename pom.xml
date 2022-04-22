@@ -13,6 +13,8 @@
   <modules>
     <module>configuration</module>
     <module>common</module>
+    <module>models</module>
+    <module>java-model-extractor</module>
   </modules>
 
   <issueManagement>
@@ -46,6 +48,9 @@
     <spotless.version>2.22.1</spotless.version>
     <junit.version>5.8.2</junit.version>
     <eclipse-collections.version>11.0.0</eclipse-collections.version>
+    <jackson.version>2.13.2</jackson.version>
+    <javaparser.version>3.24.2</javaparser.version>
+
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.release>${java.version}</maven.compiler.release>
@@ -104,6 +109,18 @@
         <scope>test</scope>
       </dependency>
 
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+
       <!-- Informalin -->
       <dependency>
         <groupId>edu.kit.kastel.informalin</groupId>
@@ -113,6 +130,11 @@
       <dependency>
         <groupId>edu.kit.kastel.informalin</groupId>
         <artifactId>configuration</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>edu.kit.kastel.informalin</groupId>
+        <artifactId>models</artifactId>
         <version>${revision}</version>
       </dependency>
     </dependencies>
