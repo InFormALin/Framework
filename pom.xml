@@ -79,18 +79,11 @@
         <version>1.9</version>
       </dependency>
 
-      <!-- Logging -->
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
       <!-- Testing -->
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-simple</artifactId>
         <version>${slf4j.version}</version>
-        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -109,6 +102,18 @@
         <artifactId>mockito-junit-jupiter</artifactId>
         <version>4.5.0</version>
         <scope>test</scope>
+      </dependency>
+
+      <!-- Informalin -->
+      <dependency>
+        <groupId>edu.kit.kastel.informalin</groupId>
+        <artifactId>common</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>edu.kit.kastel.informalin</groupId>
+        <artifactId>configuration</artifactId>
+        <version>${revision}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
