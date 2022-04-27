@@ -40,7 +40,7 @@ public abstract class AbstractConfigurable implements IConfigurable {
     protected abstract void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration);
 
     private void applyConfiguration(Map<String, String> additionalConfiguration, Class<?> currentClass) {
-        if (currentClass == Object.class)
+        if (currentClass == Object.class || currentClass == AbstractConfigurable.class)
             return;
 
         var fields = currentClass.getDeclaredFields();
@@ -82,6 +82,11 @@ public abstract class AbstractConfigurable implements IConfigurable {
         if (fieldsClass == Boolean.class || fieldsClass == Boolean.TYPE) {
             return Boolean.parseBoolean(value);
         }
+        if (fieldsClass.isEnum()) {
+            var result = Arrays.stream(fieldsClass.getEnumConstants()).filter(c -> String.valueOf(c).equals(value)).findFirst();
+            return result.orElseThrow(() -> new IllegalArgumentException("Unknown Enum Constant " + value));
+        }
+
         if (List.class.isAssignableFrom(fieldsClass) && field.getGenericType()instanceof ParameterizedType parameterizedType) {
             var generics = parameterizedType.getActualTypeArguments();
 
