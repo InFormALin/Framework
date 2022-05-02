@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class PCMModelTest {
     private static final String PATH_TO_MODEL = "src/test/resources/benchmark/mediastore/original_model/ms.repository";
 
