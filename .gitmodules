@@ -1,0 +1,3 @@
+[submodule "models/src/test/resources/benchmark"]
+	path = models/src/test/resources/benchmark
+	url = https://github.com/ArDoCo/Benchmark

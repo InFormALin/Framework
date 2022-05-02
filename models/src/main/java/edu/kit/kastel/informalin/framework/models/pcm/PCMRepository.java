@@ -17,8 +17,15 @@ public final class PCMRepository {
     @XMLList(name = "components__Repository", elementType = PCMComponent.class)
     private List<PCMComponent> components;
 
-    public PCMRepository() {
+    @XMLList(name = "interfaces__Repository", elementType = PCMInterface.class)
+    private List<PCMInterface> interfaces;
+
+    PCMRepository() {
         // NOP
+    }
+
+    void init() {
+        this.components.forEach(c -> c.init(this.interfaces));
     }
 
     public String getId() {
@@ -31,5 +38,9 @@ public final class PCMRepository {
 
     public List<PCMComponent> getComponents() {
         return new ArrayList<>(components);
+    }
+
+    public List<PCMInterface> getInterfaces() {
+        return new ArrayList<>(interfaces);
     }
 }

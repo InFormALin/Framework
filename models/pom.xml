@@ -13,7 +13,7 @@
     <dependency>
       <groupId>org.fuchss</groupId>
       <artifactId>xml-object-mapper</artifactId>
-      <version>0.3</version>
+      <version>0.4</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -28,6 +28,11 @@
       <artifactId>javaparser-core</artifactId>
       <version>${javaparser.version}</version>
       <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <repositories>
