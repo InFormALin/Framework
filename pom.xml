@@ -156,6 +156,15 @@
     </repository>
   </repositories>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
@@ -179,10 +188,12 @@
           <!-- define a language-specific format -->
           <java>
             <eclipse>
+              <!--suppress UnresolvedMavenProperty -->
               <file>${maven.multiModuleProjectDirectory}/formatter.xml</file>
             </eclipse>
             <removeUnusedImports></removeUnusedImports>
             <licenseHeader>
+              <!--suppress UnresolvedMavenProperty -->
               <file>${maven.multiModuleProjectDirectory}/license-header</file>
             </licenseHeader>
           </java>
