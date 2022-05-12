@@ -15,6 +15,7 @@
     <module>common</module>
     <module>models</module>
     <module>java-model-extractor</module>
+    <module>pipeline</module>
   </modules>
 
   <issueManagement>
