@@ -39,6 +39,7 @@
   <properties>
     <revision>0.2-SNAPSHOT</revision>
     <java.version>17</java.version>
+    <skipTests>false</skipTests>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
     <sonar.organization>informalin</sonar.organization>
@@ -234,14 +235,14 @@
           </execution>
         </executions>
       </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M6</version>
-          <configuration>
-            <skipTests>${skipTests}</skipTests>
-          </configuration>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M6</version>
+        <configuration>
+          <skipTests>${skipTests}</skipTests>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>

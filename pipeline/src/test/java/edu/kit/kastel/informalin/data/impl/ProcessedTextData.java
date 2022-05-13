@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Example {@link PipelineStepData}
+ * 
  * @author Jan Keim
  */
 public class ProcessedTextData extends PipelineStepData {

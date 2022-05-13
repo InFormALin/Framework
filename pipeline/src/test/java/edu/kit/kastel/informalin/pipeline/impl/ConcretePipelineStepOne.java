@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 
 /**
  * Example implementation of {@link AbstractPipelineStep}
+ * 
  * @author Jan Keim
  */
 public class ConcretePipelineStepOne extends AbstractPipelineStep {

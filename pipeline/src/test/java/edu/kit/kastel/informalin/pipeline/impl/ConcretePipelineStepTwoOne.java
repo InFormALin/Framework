@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Example implementation of {@link AbstractPipelineStep}
+ * 
  * @author Jan Keim
  */
 public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {

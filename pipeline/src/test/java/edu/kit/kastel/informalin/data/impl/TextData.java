@@ -8,6 +8,7 @@ import java.util.Objects;
 
 /**
  * Example {@link PipelineStepData}
+ * 
  * @author Jan Keim
  */
 public class TextData extends PipelineStepData {

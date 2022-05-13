@@ -10,6 +10,7 @@ import java.util.List;
  * Class that represents a pipeline that can consist of multiple {@link AbstractPipelineStep AbstractPipelineSteps}.
  * Steps are executed consecutively one after another in the order they were added to the pipeline. Execution calls the
  * {@link #run()} method of the different {@link AbstractPipelineStep AbstractPipelineSteps}.
+ * 
  * @author Jan Keim
  */
 public class Pipeline extends AbstractPipelineStep {

@@ -4,8 +4,6 @@ package edu.kit.kastel.informalin.pipeline;
 import edu.kit.kastel.informalin.data.DataRepository;
 import edu.kit.kastel.informalin.data.impl.ResultData;
 import edu.kit.kastel.informalin.data.impl.TextData;
-import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
-import edu.kit.kastel.informalin.pipeline.Pipeline;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepOne;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoOne;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoTwo;
@@ -15,6 +13,7 @@ import java.util.List;
 
 /**
  * Test that defines an example pipeline and executes it.
+ * 
  * @author Jan Keim
  */
 class PipelineTest {

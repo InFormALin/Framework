@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * Example implementation of {@link AbstractPipelineStep}
+ * 
  * @author Jan Keim
  */
 public class ConcretePipelineStepTwoTwo extends AbstractPipelineStep {

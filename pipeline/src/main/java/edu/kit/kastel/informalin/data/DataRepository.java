@@ -9,6 +9,7 @@ import java.util.Optional;
  * This class represents a data repository that can be used to store and fetch certain data ({@link PipelineStepData}.
  * Data can be added and fetched with the help of a data identifier (as string). Fetching also needs the necessary class
  * of data that is expected.
+ * 
  * @author Jan Keim
  */
 public class DataRepository {

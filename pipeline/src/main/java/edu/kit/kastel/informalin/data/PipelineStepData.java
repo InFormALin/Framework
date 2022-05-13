@@ -5,6 +5,7 @@ import java.util.Optional;
 
 /**
  * This abstract class defines data that is used for the pipeline steps.
+ * 
  * @author Jan Keim
  */
 public abstract class PipelineStepData {

@@ -6,6 +6,7 @@ import edu.kit.kastel.informalin.data.DataRepository;
 /**
  * This class represents an abstract pipeline step and defines the core functionality. Together with {@link Pipeline}
  * and concrete implementations of this class represents a composite pattern.
+ * 
  * @author Jan Keim
  */
 public abstract class AbstractPipelineStep {
