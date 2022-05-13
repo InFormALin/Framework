@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class Pipeline extends AbstractPipelineStep {
 
-    private String id;
     private final List<AbstractPipelineStep> pipelineSteps;
 
     /**

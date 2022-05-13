@@ -8,7 +8,7 @@ import edu.kit.kastel.informalin.data.PipelineStepData;
  * 
  * @author Jan Keim
  */
-public class ResultData extends PipelineStepData {
+public class ResultData implements PipelineStepData {
     private String result = null;
 
     public String getResult() {

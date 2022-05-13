@@ -35,7 +35,7 @@ public class ConcretePipelineStepTwoTwo extends AbstractPipelineStep {
         fetchAndInitializeData();
         System.out.println("Greetings from " + this.getClass().getSimpleName() + " with id " + getId());
         var tokens = processedTextData.getImportantTokens();
-        var tokenWithLength = tokens.stream().collect(Collectors.toMap(e -> e, e -> e.length(), (o1, o2) -> o1, TreeMap::new));
+        var tokenWithLength = tokens.stream().collect(Collectors.toMap(e -> e, String::length, (o1, o2) -> o1, TreeMap::new));
         var firstEntry = tokenWithLength.firstKey();
         resultData.setResult(firstEntry);
     }

@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @author Jan Keim
  */
-public class ProcessedTextData extends PipelineStepData {
+public class ProcessedTextData implements PipelineStepData {
     private List<String> importantTokens = null;
 
     public ProcessedTextData() {

@@ -7,6 +7,7 @@ import edu.kit.kastel.informalin.data.impl.TextData;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepOne;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoOne;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoTwo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -37,5 +38,6 @@ class PipelineTest {
 
         var resultData = dataRepository.getData("ResultData", ResultData.class).orElseThrow();
         System.out.println("Result: " + resultData.getResult());
+        Assertions.assertNotNull(resultData);
     }
 }

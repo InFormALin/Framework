@@ -11,7 +11,7 @@ import java.util.Objects;
  * 
  * @author Jan Keim
  */
-public class TextData extends PipelineStepData {
+public class TextData implements PipelineStepData {
     private final String text;
     private List<String> tokens;
 

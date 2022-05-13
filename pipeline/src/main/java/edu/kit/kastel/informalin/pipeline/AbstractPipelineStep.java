@@ -37,7 +37,7 @@ public abstract class AbstractPipelineStep {
      * 
      * @return the id
      */
-    public String getId() {
+    public final String getId() {
         return id;
     }
 }
