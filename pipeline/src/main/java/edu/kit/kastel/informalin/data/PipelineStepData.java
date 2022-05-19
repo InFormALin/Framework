@@ -21,17 +21,6 @@ public interface PipelineStepData extends Serializable {
     Logger logger = LoggerFactory.getLogger(PipelineStepData.class);
 
     /**
-     * Checks if this data can be cast into the given {@link PipelineStepData} class.
-     *
-     * @param clazz class the data should be cast into
-     * @param <T>   class type of the preferred data type
-     * @return true, if casting is possible. Else, false
-     */
-    default <T extends PipelineStepData> boolean isClass(Class<T> clazz) {
-        return clazz.isAssignableFrom(this.getClass());
-    }
-
-    /**
      * Converts this data into a given {@link PipelineStepData} class and returns the converted class, packed in an
      * {@link Optional}. If conversion is impossible, returns an empty {@link Optional}.
      *
@@ -39,8 +28,8 @@ public interface PipelineStepData extends Serializable {
      * @param <T>   {@link PipelineStepData} type
      * @return Optional containing the converted class or that is empty, if conversion failed.
      */
-    default <T extends PipelineStepData> Optional<T> convertToClass(Class<T> clazz) {
-        if (!this.isClass(clazz)) {
+    default <T extends PipelineStepData> Optional<T> asPipelineStepData(Class<T> clazz) {
+        if (!clazz.isAssignableFrom(this.getClass())) {
             return Optional.empty();
         } else {
             return Optional.of(clazz.cast(this));
