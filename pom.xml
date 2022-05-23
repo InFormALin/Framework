@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.kit.kastel.informalin</groupId>
-  <artifactId>framework</artifactId>
+  <groupId>com.github.informalin.framework</groupId>
+  <artifactId>parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
 
@@ -123,17 +123,17 @@
 
       <!-- Informalin -->
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
         <version>${revision}</version>
       </dependency>
