@@ -45,7 +45,7 @@
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
               <addClasspath>true</addClasspath>
-              <mainClass>com.github.informalin.framework.framework.models.java.extractor.JavaCodeModelExtractor</mainClass>
+              <mainClass>edu.kit.kastel.informalin.framework.models.java.extractor.JavaCodeModelExtractor</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
