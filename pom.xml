@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.kit.kastel.informalin</groupId>
-  <artifactId>framework</artifactId>
+  <groupId>com.github.informalin.framework</groupId>
+  <artifactId>parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
 
@@ -23,23 +23,9 @@
     <url>https://github.com/InFormALin/Framework/issues</url>
   </issueManagement>
 
-  <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
-    </repository>
-    <snapshotRepository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <properties>
     <revision>0.2-SNAPSHOT</revision>
     <java.version>17</java.version>
-    <skipTests>false</skipTests>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
     <sonar.organization>informalin</sonar.organization>
@@ -125,17 +111,17 @@
 
       <!-- Informalin -->
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>com.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -150,13 +136,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
-    </repository>
-  </repositories>
   <build>
     <pluginManagement>
       <plugins>
@@ -234,14 +213,6 @@
             <phase>clean</phase>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M6</version>
-        <configuration>
-          <skipTests>${skipTests}</skipTests>
-        </configuration>
       </plugin>
     </plugins>
   </build>
