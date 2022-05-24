@@ -24,7 +24,7 @@
   </issueManagement>
 
   <properties>
-    <revision>0.3-SNAPSHOT</revision>
+    <revision>0.3</revision>
     <java.version>17</java.version>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
