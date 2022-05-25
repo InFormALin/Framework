@@ -125,6 +125,11 @@
         <artifactId>models</artifactId>
         <version>${revision}</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.informalin.framework</groupId>
+        <artifactId>pipeline</artifactId>
+        <version>${revision}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
