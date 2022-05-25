@@ -2,6 +2,7 @@
 package edu.kit.kastel.informalin.pipeline;
 
 import edu.kit.kastel.informalin.data.DataRepository;
+import edu.kit.kastel.informalin.framework.configuration.AbstractConfigurable;
 
 /**
  * This class represents an abstract pipeline step and defines the core functionality. Together with {@link Pipeline}
@@ -9,7 +10,7 @@ import edu.kit.kastel.informalin.data.DataRepository;
  * 
  * @author Jan Keim
  */
-public abstract class AbstractPipelineStep {
+public abstract class AbstractPipelineStep extends AbstractConfigurable {
     private final String id;
     private final DataRepository dataRepository;
 

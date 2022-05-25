@@ -7,6 +7,7 @@ import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -35,5 +36,10 @@ public class ConcretePipelineStepOne extends AbstractPipelineStep {
         var tokens = Arrays.stream(text.split(" ")).toList();
         tokens = tokens.stream().filter(Predicate.not(stopwords::contains)).toList();
         textData.setTokens(tokens);
+    }
+
+    @Override
+    protected void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration) {
+        // NOP
     }
 }

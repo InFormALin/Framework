@@ -5,6 +5,7 @@ import edu.kit.kastel.informalin.data.DataRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represents a pipeline that can consist of multiple {@link AbstractPipelineStep AbstractPipelineSteps}.
@@ -55,5 +56,10 @@ public class Pipeline extends AbstractPipelineStep {
         for (var pipelineStep : this.pipelineSteps) {
             pipelineStep.run();
         }
+    }
+
+    @Override
+    protected void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration) {
+        this.pipelineSteps.forEach(it -> it.applyConfiguration(additionalConfiguration));
     }
 }

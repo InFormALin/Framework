@@ -6,6 +6,7 @@ import edu.kit.kastel.informalin.data.impl.ProcessedTextData;
 import edu.kit.kastel.informalin.data.impl.ResultData;
 import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
 
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -38,5 +39,10 @@ public class ConcretePipelineStepTwoTwo extends AbstractPipelineStep {
         var tokenWithLength = tokens.stream().collect(Collectors.toMap(e -> e, String::length, (o1, o2) -> o1, TreeMap::new));
         var firstEntry = tokenWithLength.firstKey();
         resultData.setResult(firstEntry);
+    }
+
+    @Override
+    protected void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration) {
+        // NOP
     }
 }
