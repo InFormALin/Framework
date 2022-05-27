@@ -16,6 +16,7 @@
     <module>models</module>
     <module>java-model-extractor</module>
     <module>pipeline</module>
+    <module>docker</module>
   </modules>
 
   <issueManagement>
@@ -128,6 +129,11 @@
       <dependency>
         <groupId>com.github.informalin.framework</groupId>
         <artifactId>pipeline</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.github.informalin.framework</groupId>
+        <artifactId>docker</artifactId>
         <version>${revision}</version>
       </dependency>
     </dependencies>
