@@ -18,14 +18,15 @@ class DockerManagerTest {
     void testCreation() throws Exception {
         dm = new DockerManager("tests");
         Assertions.assertTrue(dm.getContainerIds().isEmpty());
-        var id = dm.createContainerByImage("httpd:2.4", 12345, true);
-        Assertions.assertNotNull(id);
-        Assertions.assertFalse(id.isBlank());
+        var containerInformation = dm.createContainerByImage("httpd:2.4", true, true);
+        Assertions.assertNotNull(containerInformation);
+        Assertions.assertNotNull(containerInformation.containerId());
+        Assertions.assertFalse(containerInformation.containerId().isBlank());
         Assertions.assertEquals(1, dm.getContainerIds().size());
-        Assertions.assertEquals(dm.getContainerIds().get(0), id);
+        Assertions.assertEquals(dm.getContainerIds().get(0), containerInformation.containerId());
 
         // Verify that the service runs ..
-        URL url = new URL("http://127.0.0.1:12345");
+        URL url = new URL("http://127.0.0.1:" + containerInformation.apiPort());
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         InputStream is = con.getInputStream();

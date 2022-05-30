@@ -1,11 +1,16 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.docker;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +26,7 @@ import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 
 import edu.kit.kastel.informalin.framework.common.Internal;
+import io.netty.handler.codec.http.HttpStatusClass;
 
 /**
  * This class manages the docker containers used in InFormALin.
@@ -29,6 +35,9 @@ import edu.kit.kastel.informalin.framework.common.Internal;
  */
 public class DockerManager {
     private static final Logger logger = LoggerFactory.getLogger(DockerManager.class);
+    private static int lastPort = 10000;
+    private static final int MAX_RETRIES = 5;
+    private static final long WAIT_BETWEEN_RETRIES = 3000L;
 
     private final String namespacePrefix;
     private final DockerClient dockerClient;
@@ -72,23 +81,22 @@ public class DockerManager {
     /**
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
      * 
-     * @param image   the image name (with or without tag)
-     * @param apiPort the target api port
-     * @return the container id
+     * @param image the image name (with or without tag)
+     * @return the container information
      */
-    public String createContainerByImage(String image, int apiPort) {
-        return this.createContainerByImage(image, apiPort, true);
+    public ContainerResponse createContainerByImage(String image) {
+        return this.createContainerByImage(image, true, true);
     }
 
     /**
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
      * 
-     * @param image                  the image name (with or without tag)
-     * @param apiPort                the target api port
-     * @param pullOnlyIfImageMissing indicator whether pull shall only be executed if image is missing
-     * @return the container id
+     * @param image                    the image name (with or without tag)
+     * @param pullOnlyIfImageMissing   indicator whether pull shall only be executed if image is missing
+     * @param waitForEndpointAvailable indicator whether the method shall wait until the endpoint is available
+     * @return the container information
      */
-    public String createContainerByImage(String image, int apiPort, boolean pullOnlyIfImageMissing) {
+    public ContainerResponse createContainerByImage(String image, boolean pullOnlyIfImageMissing, boolean waitForEndpointAvailable) {
         boolean pull = true;
         if (pullOnlyIfImageMissing) {
             boolean imagePresent = this.dockerClient.listImagesCmd().exec().stream().anyMatch(it -> Arrays.asList(it.getRepoTags()).contains(image));
@@ -113,6 +121,7 @@ public class DockerManager {
             throw new IllegalArgumentException("Image does not expose exactly one port");
         }
 
+        int apiPort = getNextFreePort();
         var binding = new PortBinding(new Ports.Binding("127.0.0.1", String.valueOf(apiPort)), ports[0]);
 
         String id;
@@ -121,7 +130,25 @@ public class DockerManager {
             logger.info("Created container {}", id);
         }
         this.dockerClient.startContainerCmd(id).exec();
-        return id;
+
+        if (waitForEndpointAvailable)
+            waitForAPI(apiPort);
+
+        return new ContainerResponse(id, apiPort);
+    }
+
+    private void waitForAPI(int apiPort) {
+        for (int currentTry = 0; currentTry < MAX_RETRIES; currentTry++) {
+            try (var client = HttpClients.createDefault()) {
+                var httpResponse = client.execute(new HttpGet("http://127.0.0.1:" + apiPort));
+                if (HttpStatusClass.SUCCESS.contains(httpResponse.getCode())) {
+                    return;
+                }
+            } catch (IOException e) {
+                logger.debug(e.getMessage(), e);
+            }
+        }
+        throw new IllegalStateException("Container was not ready. Abort.");
     }
 
     /**
@@ -163,6 +190,28 @@ public class DockerManager {
     public List<String> getContainerIds() {
         var containers = this.dockerClient.listContainersCmd().withShowAll(true).exec();
         return containers.stream().filter(c -> c.getNames().length > 0 && c.getNames()[0].startsWith("/" + namespacePrefix)).map(Container::getId).toList();
+    }
+
+    /**
+     * Returns a free local unprivileged port.
+     * 
+     * @return the free port
+     * @throws IllegalStateException if no port is available
+     */
+    public static synchronized int getNextFreePort() {
+        var ports = IntStream.range(lastPort + 1, 20000).toArray();
+        for (int port : ports) {
+            try {
+                ServerSocket socket = new ServerSocket(port);
+                socket.close();
+                lastPort = port;
+                return port;
+            } catch (IOException ex) {
+                logger.debug("Port {} is not free.", port);
+            }
+        }
+        // if the program gets here, no port in the range was found
+        throw new IllegalStateException("no free port found");
     }
 
     /**
