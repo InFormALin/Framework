@@ -2,6 +2,7 @@
 package edu.kit.kastel.informalin.framework.docker;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,6 +19,8 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
+
+import edu.kit.kastel.informalin.framework.common.Internal;
 
 /**
  * This class manages the docker containers used in InFormALin.
@@ -66,12 +69,42 @@ public class DockerManager {
             shutdownAll();
     }
 
+    /**
+     * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
+     * 
+     * @param image   the image name (with or without tag)
+     * @param apiPort the target api port
+     * @return the container id
+     */
     public String createContainerByImage(String image, int apiPort) {
-        try {
-            this.dockerClient.pullImageCmd(image).start().awaitCompletion();
-        } catch (InterruptedException e) {
-            logger.error(e.getMessage(), e);
-            Thread.currentThread().interrupt();
+        return this.createContainerByImage(image, apiPort, true);
+    }
+
+    /**
+     * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
+     * 
+     * @param image                  the image name (with or without tag)
+     * @param apiPort                the target api port
+     * @param pullOnlyIfImageMissing indicator whether pull shall only be executed if image is missing
+     * @return the container id
+     */
+    public String createContainerByImage(String image, int apiPort, boolean pullOnlyIfImageMissing) {
+        boolean pull = true;
+        if (pullOnlyIfImageMissing) {
+            boolean imagePresent = this.dockerClient.listImagesCmd().exec().stream().anyMatch(it -> Arrays.asList(it.getRepoTags()).contains(image));
+            if (imagePresent) {
+                logger.debug("Image {} already present. Not pulling!", image);
+                pull = false;
+            }
+        }
+
+        if (pull) {
+            try {
+                this.dockerClient.pullImageCmd(image).start().awaitCompletion();
+            } catch (InterruptedException e) {
+                logger.error(e.getMessage(), e);
+                Thread.currentThread().interrupt();
+            }
         }
 
         var config = this.dockerClient.inspectImageCmd(image).exec().getContainerConfig();
@@ -91,6 +124,11 @@ public class DockerManager {
         return id;
     }
 
+    /**
+     * Shutdown and cleanup an container by id.
+     * 
+     * @param id the container id
+     */
     public void shutdown(String id) {
         var running = this.dockerClient.listContainersCmd().withShowAll(false).exec();
         if (running.stream().anyMatch(c -> c.getId().equals(id)))
@@ -101,6 +139,9 @@ public class DockerManager {
             this.dockerClient.removeContainerCmd(id).exec();
     }
 
+    /**
+     * Shutdown and cleanup all containers w.r.t. the namespacePrefix
+     */
     public void shutdownAll() {
         var containers = this.dockerClient.listContainersCmd().withShowAll(true).exec();
         for (var container : containers) {
@@ -114,8 +155,23 @@ public class DockerManager {
         }
     }
 
+    /**
+     * Get all container ids managed by this docker manager.
+     * 
+     * @return all container ids
+     */
     public List<String> getContainerIds() {
         var containers = this.dockerClient.listContainersCmd().withShowAll(true).exec();
         return containers.stream().filter(c -> c.getNames().length > 0 && c.getNames()[0].startsWith("/" + namespacePrefix)).map(Container::getId).toList();
+    }
+
+    /**
+     * Get access to the internal docker client for more actions.
+     * 
+     * @return the internal docker client
+     */
+    @Internal
+    public DockerClient getDockerClient() {
+        return dockerClient;
     }
 }

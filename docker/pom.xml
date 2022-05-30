@@ -14,6 +14,10 @@
   </properties>
   <dependencies>
     <dependency>
+      <groupId>com.github.informalin.framework</groupId>
+      <artifactId>common</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.github.docker-java</groupId>
       <artifactId>docker-java</artifactId>
       <version>${docker-java.version}</version>

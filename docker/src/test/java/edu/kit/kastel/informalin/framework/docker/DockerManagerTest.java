@@ -1,15 +1,15 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.docker;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class DockerManagerTest {
     private DockerManager dm;
@@ -18,7 +18,7 @@ class DockerManagerTest {
     void testCreation() throws Exception {
         dm = new DockerManager("tests");
         Assertions.assertTrue(dm.getContainerIds().isEmpty());
-        var id = dm.createContainerByImage("httpd:2.4", 12345);
+        var id = dm.createContainerByImage("httpd:2.4", 12345, true);
         Assertions.assertNotNull(id);
         Assertions.assertFalse(id.isBlank());
         Assertions.assertEquals(1, dm.getContainerIds().size());
