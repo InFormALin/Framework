@@ -92,8 +92,13 @@ public class DockerManager {
     }
 
     public void shutdown(String id) {
-        this.dockerClient.killContainerCmd(id).exec();
-        this.dockerClient.removeContainerCmd(id).exec();
+        var running = this.dockerClient.listContainersCmd().withShowAll(false).exec();
+        if (running.stream().anyMatch(c -> c.getId().equals(id)))
+            this.dockerClient.killContainerCmd(id).exec();
+
+        var existing = this.dockerClient.listContainersCmd().withShowAll(true).exec();
+        if (existing.stream().anyMatch(c -> c.getId().equals(id)))
+            this.dockerClient.removeContainerCmd(id).exec();
     }
 
     public void shutdownAll() {
@@ -102,7 +107,8 @@ public class DockerManager {
             var name = container.getNames();
             if (name.length != 0 && name[0].startsWith("/" + namespacePrefix)) {
                 logger.info("Shutting down {}", container);
-                this.dockerClient.killContainerCmd(container.getId()).exec();
+                if (Boolean.TRUE.equals(this.dockerClient.inspectContainerCmd(container.getId()).exec().getState().getRunning()))
+                    this.dockerClient.killContainerCmd(container.getId()).exec();
                 this.dockerClient.removeContainerCmd(container.getId()).exec();
             }
         }
