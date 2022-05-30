@@ -146,6 +146,12 @@ public class DockerManager {
                 }
             } catch (IOException e) {
                 logger.debug(e.getMessage(), e);
+                try {
+                    Thread.sleep(WAIT_BETWEEN_RETRIES);
+                } catch (InterruptedException ex) {
+                    logger.error(ex.getMessage(), ex);
+                    Thread.currentThread().interrupt();
+                }
             }
         }
         throw new IllegalStateException("Container was not ready. Abort.");
