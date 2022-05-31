@@ -25,7 +25,6 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 
-import edu.kit.kastel.informalin.framework.common.Internal;
 import io.netty.handler.codec.http.HttpStatusClass;
 
 /**
@@ -37,7 +36,7 @@ public class DockerManager {
     private static final Logger logger = LoggerFactory.getLogger(DockerManager.class);
     private static int lastPort = 10000;
     private static final int MAX_RETRIES = 5;
-    private static final long WAIT_BETWEEN_RETRIES = 3000L;
+    private static final long WAIT_BETWEEN_RETRIES = 10000L;
 
     private final String namespacePrefix;
     private final DockerClient dockerClient;
@@ -99,7 +98,10 @@ public class DockerManager {
     public ContainerResponse createContainerByImage(String image, boolean pullOnlyIfImageMissing, boolean waitForEndpointAvailable) {
         boolean pull = true;
         if (pullOnlyIfImageMissing) {
-            boolean imagePresent = this.dockerClient.listImagesCmd().exec().stream().anyMatch(it -> Arrays.asList(it.getRepoTags()).contains(image));
+            boolean imagePresent = this.dockerClient.listImagesCmd()
+                    .exec()
+                    .stream()
+                    .anyMatch(it -> it.getRepoTags() != null && Arrays.asList(it.getRepoTags()).contains(image));
             if (imagePresent) {
                 logger.debug("Image {} already present. Not pulling!", image);
                 pull = false;
@@ -218,15 +220,5 @@ public class DockerManager {
         }
         // if the program gets here, no port in the range was found
         throw new IllegalStateException("no free port found");
-    }
-
-    /**
-     * Get access to the internal docker client for more actions.
-     * 
-     * @return the internal docker client
-     */
-    @Internal
-    public DockerClient getDockerClient() {
-        return dockerClient;
     }
 }
