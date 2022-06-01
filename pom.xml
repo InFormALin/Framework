@@ -8,8 +8,15 @@
   <packaging>pom</packaging>
 
   <name>InFormALin Framework</name>
+  <description>Informal and Formal Artifacts Linker (InFormALin)</description>
   <url>https://github.com/InFormALin/Framework</url>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
   <developers>
     <developer>
       <id>Hossiphi</id>
@@ -48,6 +55,11 @@
     <module>pipeline</module>
     <module>docker</module>
   </modules>
+  <scm>
+    <connection>scm:git:git://github.com/InFormALin/Framework.git</connection>
+    <developerConnection>scm:git:ssh://github.com:InFormALin/Framework.git</developerConnection>
+    <url>http://github.com/InFormALin/Framework/tree/main</url>
+  </scm>
 
   <issueManagement>
     <system>GitHub Issues</system>
