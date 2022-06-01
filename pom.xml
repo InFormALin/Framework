@@ -2,13 +2,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.informalin.framework</groupId>
+  <groupId>io.github.informalin.framework</groupId>
   <artifactId>parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
 
   <name>InFormALin Framework</name>
   <url>https://github.com/InFormALin/Framework</url>
+
+  <developers>
+    <developer>
+      <id>Hossiphi</id>
+      <name>Sophie Corallo</name>
+      <email>sophie.schulz@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_sophie_schulz.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+    <developer>
+      <id>dfuchss</id>
+      <name>Dominik Fuchss</name>
+      <email>dominik.fuchss@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_dominik_fuchss.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+    <developer>
+      <id>Gram21</id>
+      <name>Jan Keim</name>
+      <email>jan.keim@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_Keim_Jan.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+  </developers>
 
   <modules>
     <module>configuration</module>
@@ -23,7 +53,16 @@
     <system>GitHub Issues</system>
     <url>https://github.com/InFormALin/Framework/issues</url>
   </issueManagement>
-
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   <properties>
     <revision>0.5-SNAPSHOT</revision>
     <java.version>17</java.version>
@@ -112,27 +151,27 @@
 
       <!-- Informalin -->
       <dependency>
-        <groupId>com.github.informalin.framework</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.informalin.framework</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.informalin.framework</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.informalin.framework</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>pipeline</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>com.github.informalin.framework</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>docker</artifactId>
         <version>${revision}</version>
       </dependency>
@@ -227,6 +266,49 @@
               <goal>clean</goal>
             </goals>
             <phase>clean</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+            <phase>verify</phase>
+            <configuration>
+              <keyname>15B81B60293634F6616070302CF31D214A49E3B2</keyname>
+            </configuration>
           </execution>
         </executions>
       </plugin>
