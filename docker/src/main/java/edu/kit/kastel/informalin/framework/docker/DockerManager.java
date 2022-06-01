@@ -209,9 +209,7 @@ public class DockerManager {
     public static synchronized int getNextFreePort() {
         var ports = IntStream.range(lastPort + 1, 20000).toArray();
         for (int port : ports) {
-            try {
-                ServerSocket socket = new ServerSocket(port);
-                socket.close();
+            try (ServerSocket ignored = new ServerSocket(port)) {
                 lastPort = port;
                 return port;
             } catch (IOException ex) {
