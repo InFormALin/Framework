@@ -16,6 +16,7 @@
     <module>models</module>
     <module>java-model-extractor</module>
     <module>pipeline</module>
+    <module>docker</module>
   </modules>
 
   <issueManagement>
@@ -130,6 +131,11 @@
         <artifactId>pipeline</artifactId>
         <version>${revision}</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.informalin.framework</groupId>
+        <artifactId>docker</artifactId>
+        <version>${revision}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -148,6 +154,11 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M6</version>
         </plugin>
       </plugins>
     </pluginManagement>
