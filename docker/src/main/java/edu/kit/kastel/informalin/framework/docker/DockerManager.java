@@ -15,10 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
+import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
@@ -88,14 +85,29 @@ public class DockerManager {
     }
 
     /**
+     *
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
-     * 
+     *
      * @param image                    the image name (with or without tag)
      * @param pullOnlyIfImageMissing   indicator whether pull shall only be executed if image is missing
      * @param waitForEndpointAvailable indicator whether the method shall wait until the endpoint is available
      * @return the container information
      */
     public ContainerResponse createContainerByImage(String image, boolean pullOnlyIfImageMissing, boolean waitForEndpointAvailable) {
+        return createContainerByImage(image, -1, pullOnlyIfImageMissing, waitForEndpointAvailable);
+    }
+
+    /**
+     * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
+     * 
+     * @param image                    the image name (with or without tag)
+     * @param targetPort               the API port to be exposed (if 0 or negative, the port will be determined
+     *                                 automatically)
+     * @param pullOnlyIfImageMissing   indicator whether pull shall only be executed if image is missing
+     * @param waitForEndpointAvailable indicator whether the method shall wait until the endpoint is available
+     * @return the container information
+     */
+    public ContainerResponse createContainerByImage(String image, int targetPort, boolean pullOnlyIfImageMissing, boolean waitForEndpointAvailable) {
         boolean pull = true;
         if (pullOnlyIfImageMissing) {
             boolean imagePresent = this.dockerClient.listImagesCmd()
@@ -117,14 +129,20 @@ public class DockerManager {
             }
         }
 
-        var config = this.dockerClient.inspectImageCmd(image).exec().getContainerConfig();
-        var ports = config == null ? null : config.getExposedPorts();
-        if (ports == null || ports.length != 1) {
-            throw new IllegalArgumentException("Image does not expose exactly one port");
+        ExposedPort port;
+        if (targetPort <= 0) {
+            var config = this.dockerClient.inspectImageCmd(image).exec().getContainerConfig();
+            var ports = config == null ? null : config.getExposedPorts();
+            if (ports == null || ports.length != 1) {
+                throw new IllegalArgumentException("Image does not expose exactly one port");
+            }
+            port = ports[0];
+        } else {
+            port = new ExposedPort(targetPort);
         }
 
         int apiPort = getNextFreePort();
-        var binding = new PortBinding(new Ports.Binding("127.0.0.1", String.valueOf(apiPort)), ports[0]);
+        var binding = new PortBinding(new Ports.Binding("127.0.0.1", String.valueOf(apiPort)), port);
 
         String id;
         try (var create = this.dockerClient.createContainerCmd(image)) {
