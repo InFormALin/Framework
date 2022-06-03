@@ -16,9 +16,9 @@ the [KIT](https://www.kit.edu).
 ```xml
 
 <dependency>
-	<groupId>io.github.informalin.framework</groupId>
-	<artifactId>SUBPROJECT</artifactId>
-	<version>0.6</version>
+    <groupId>io.github.informalin.framework</groupId>
+    <artifactId>SUBPROJECT</artifactId>
+    <version>0.7</version>
 </dependency>
 ```
 
