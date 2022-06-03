@@ -35,11 +35,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <repositories>
-    <repository>
-      <id>gh-fuchss</id>
-      <name>GitHub Maven Packages</name>
-      <url>https://packages.fuchss.org/github/releases/raw/branch/releases/</url>
-    </repository>
-  </repositories>
 </project>
