@@ -3,26 +3,15 @@ package edu.kit.kastel.informalin.framework.docker;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.*;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.transport.DockerHttpClient;
-
-import io.netty.handler.codec.http.HttpStatusClass;
 
 /**
  * This class manages the docker containers used in InFormALin.
@@ -36,7 +25,7 @@ public class DockerManager {
     private static final long WAIT_BETWEEN_RETRIES = 10000L;
 
     private final String namespacePrefix;
-    private final DockerClient dockerClient;
+    private final DockerAPI dockerAPI;
 
     /**
      * Create the manager with a container name prefix.
@@ -55,20 +44,12 @@ public class DockerManager {
      * @param shutdownExisting indicator whether existing containers need to be shut down at the beginning
      */
     public DockerManager(String namespacePrefix, boolean shutdownExisting) {
-        this(namespacePrefix, shutdownExisting, DefaultDockerClientConfig.createDefaultConfigBuilder().build());
+        this(namespacePrefix, shutdownExisting, null);
     }
 
-    private DockerManager(String namespacePrefix, boolean shutdownExisting, DockerClientConfig dockerConfig) {
+    private DockerManager(String namespacePrefix, boolean shutdownExisting, String dockerHost) {
         this.namespacePrefix = namespacePrefix;
-        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder().dockerHost(dockerConfig.getDockerHost())
-                .sslConfig(dockerConfig.getSSLConfig())
-                .maxConnections(100)
-                .connectionTimeout(Duration.ofSeconds(30))
-                .responseTimeout(Duration.ofSeconds(45))
-                .build();
-        this.dockerClient = DockerClientImpl.getInstance(dockerConfig, httpClient);
-
-        logger.info("Connected to Docker {}", dockerClient.versionCmd().exec());
+        this.dockerAPI = new DockerAPI(dockerHost);
 
         if (shutdownExisting)
             shutdownAll();
@@ -110,10 +91,7 @@ public class DockerManager {
     public ContainerResponse createContainerByImage(String image, int targetPort, boolean pullOnlyIfImageMissing, boolean waitForEndpointAvailable) {
         boolean pull = true;
         if (pullOnlyIfImageMissing) {
-            boolean imagePresent = this.dockerClient.listImagesCmd()
-                    .exec()
-                    .stream()
-                    .anyMatch(it -> it.getRepoTags() != null && Arrays.asList(it.getRepoTags()).contains(image));
+            boolean imagePresent = dockerAPI.listImagesCmd().stream().anyMatch(it -> it.repositoryWithTag().equals(image));
             if (imagePresent) {
                 logger.debug("Image {} already present. Not pulling!", image);
                 pull = false;
@@ -121,35 +99,25 @@ public class DockerManager {
         }
 
         if (pull) {
-            try {
-                this.dockerClient.pullImageCmd(image).start().awaitCompletion();
-            } catch (InterruptedException e) {
-                logger.error(e.getMessage(), e);
-                Thread.currentThread().interrupt();
-            }
+            dockerAPI.pullImageCmd(image);
         }
 
-        ExposedPort port;
+        int port;
         if (targetPort <= 0) {
-            var config = this.dockerClient.inspectImageCmd(image).exec().getContainerConfig();
-            var ports = config == null ? null : config.getExposedPorts();
-            if (ports == null || ports.length != 1) {
+            var config = this.dockerAPI.inspectImageCmd(image);
+            var ports = config == null ? null : config.exposedPorts();
+            if (ports == null || ports.size() != 1) {
                 throw new IllegalArgumentException("Image does not expose exactly one port");
             }
-            port = ports[0];
+            port = ports.get(0);
         } else {
-            port = new ExposedPort(targetPort);
+            port = targetPort;
         }
 
         int apiPort = getNextFreePort();
-        var binding = new PortBinding(new Ports.Binding("127.0.0.1", String.valueOf(apiPort)), port);
-
-        String id;
-        try (var create = this.dockerClient.createContainerCmd(image)) {
-            id = create.withName(namespacePrefix + UUID.randomUUID()).withHostConfig(HostConfig.newHostConfig().withPortBindings(binding)).exec().getId();
-            logger.info("Created container {}", id);
-        }
-        this.dockerClient.startContainerCmd(id).exec();
+        DockerAPI.DockerPortBind dpb = new DockerAPI.DockerPortBind(apiPort, port, false);
+        String id = dockerAPI.createContainer(namespacePrefix + UUID.randomUUID(), image, dpb);
+        logger.info("Created container {}", id);
 
         if (waitForEndpointAvailable)
             waitForAPI(apiPort);
@@ -161,7 +129,7 @@ public class DockerManager {
         for (int currentTry = 0; currentTry < MAX_RETRIES; currentTry++) {
             try (var client = HttpClients.createDefault()) {
                 var httpResponse = client.execute(new HttpGet("http://127.0.0.1:" + apiPort));
-                if (HttpStatusClass.SUCCESS.contains(httpResponse.getCode())) {
+                if (HttpStatus.SC_SUCCESS == httpResponse.getCode()) {
                     return;
                 }
             } catch (IOException e) {
@@ -183,27 +151,27 @@ public class DockerManager {
      * @param id the container id
      */
     public void shutdown(String id) {
-        var running = this.dockerClient.listContainersCmd().withShowAll(false).exec();
-        if (running.stream().anyMatch(c -> c.getId().equals(id)))
-            this.dockerClient.killContainerCmd(id).exec();
+        var running = this.dockerAPI.listContainersCmd(false);
+        if (running.stream().anyMatch(c -> c.id().equals(id)))
+            this.dockerAPI.killContainerCmd(id);
 
-        var existing = this.dockerClient.listContainersCmd().withShowAll(true).exec();
-        if (existing.stream().anyMatch(c -> c.getId().equals(id)))
-            this.dockerClient.removeContainerCmd(id).exec();
+        var existing = this.dockerAPI.listContainersCmd(true);
+        if (existing.stream().anyMatch(c -> c.id().equals(id)))
+            this.dockerAPI.removeContainerCmd(id);
     }
 
     /**
      * Shutdown and cleanup all containers w.r.t. the namespacePrefix
      */
     public void shutdownAll() {
-        var containers = this.dockerClient.listContainersCmd().withShowAll(true).exec();
+        var containers = this.dockerAPI.listContainersCmd(true);
         for (var container : containers) {
-            var name = container.getNames();
-            if (name.length != 0 && name[0].startsWith("/" + namespacePrefix)) {
+            var name = container.name();
+            if (name != null && name.startsWith(namespacePrefix)) {
                 logger.info("Shutting down {}", container);
-                if (Boolean.TRUE.equals(this.dockerClient.inspectContainerCmd(container.getId()).exec().getState().getRunning()))
-                    this.dockerClient.killContainerCmd(container.getId()).exec();
-                this.dockerClient.removeContainerCmd(container.getId()).exec();
+                if (container.isRunning())
+                    this.dockerAPI.killContainerCmd(container.id());
+                this.dockerAPI.removeContainerCmd(container.id());
             }
         }
     }
@@ -214,8 +182,8 @@ public class DockerManager {
      * @return all container ids
      */
     public List<String> getContainerIds() {
-        var containers = this.dockerClient.listContainersCmd().withShowAll(true).exec();
-        return containers.stream().filter(c -> c.getNames().length > 0 && c.getNames()[0].startsWith("/" + namespacePrefix)).map(Container::getId).toList();
+        var containers = this.dockerAPI.listContainersCmd(true);
+        return containers.stream().filter(c -> c.name() != null && c.name().startsWith(namespacePrefix)).map(DockerAPI.DockerContainer::id).toList();
     }
 
     /**
