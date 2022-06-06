@@ -44,12 +44,8 @@ public class DockerManager {
      * @param shutdownExisting indicator whether existing containers need to be shut down at the beginning
      */
     public DockerManager(String namespacePrefix, boolean shutdownExisting) {
-        this(namespacePrefix, shutdownExisting, null);
-    }
-
-    private DockerManager(String namespacePrefix, boolean shutdownExisting, String dockerHost) {
         this.namespacePrefix = namespacePrefix;
-        this.dockerAPI = new DockerAPI(dockerHost);
+        this.dockerAPI = new DockerAPI();
 
         if (shutdownExisting)
             shutdownAll();

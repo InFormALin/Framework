@@ -18,19 +18,13 @@ public final class DockerAPI {
     private static final Logger logger = LoggerFactory.getLogger(DockerAPI.class);
 
     private final ObjectMapper oom = new ObjectMapper();
-    private final String host;
 
     public DockerAPI() {
-        this(null);
-    }
-
-    public DockerAPI(String host) {
-        this.host = host;
         this.checkDockerExistence();
     }
 
     public List<DockerImage> listImagesCmd() {
-        String imageCommand = getDockerCommand() + "images";
+        String imageCommand = "docker images";
         var result = ExecuteCmd.runCommand(imageCommand);
         if (!result.success()) {
             logger.error("Failed to execute images command: {}", result.stdErr());
@@ -46,7 +40,7 @@ public final class DockerAPI {
     }
 
     public boolean pullImageCmd(String image) {
-        String pullCommand = getDockerCommand() + "pull " + image;
+        String pullCommand = "docker pull " + image;
         var result = ExecuteCmd.runCommand(pullCommand, 60 * 5);
         if (!result.success()) {
             logger.error("Failed to execute pull command: {}", result.stdErr());
@@ -56,7 +50,7 @@ public final class DockerAPI {
     }
 
     public List<DockerContainer> listContainersCmd(boolean showAll) {
-        String listCommand = getDockerCommand() + "ps";
+        String listCommand = "docker ps";
         if (showAll)
             listCommand += " -a";
 
@@ -74,7 +68,7 @@ public final class DockerAPI {
     }
 
     public DockerImage inspectImageCmd(String image) {
-        String inspectImageCommand = getDockerCommand() + "image inspect " + image;
+        String inspectImageCommand = "docker image inspect " + image;
         var result = ExecuteCmd.runCommand(inspectImageCommand);
         if (!result.success()) {
             logger.error("Failed to execute inspect image command: {}", result.stdErr());
@@ -104,7 +98,7 @@ public final class DockerAPI {
             throw new IllegalArgumentException("Invalid Docker Port Binding");
         }
         String realName = name.replaceAll("[^A-Za-z0-9_-]", "");
-        String runCommand = getDockerCommand() + "run -d --name " + realName;
+        String runCommand = "docker run -d --name " + realName;
         if (dpb.wildcard()) {
             runCommand += " -p 0.0.0.0:" + dpb.hostPort() + ":" + dpb.containerPort();
         } else {
@@ -122,7 +116,7 @@ public final class DockerAPI {
     }
 
     public boolean killContainerCmd(String id) {
-        String killCommand = getDockerCommand() + " kill " + id;
+        String killCommand = "docker kill " + id;
         var result = ExecuteCmd.runCommand(killCommand);
         if (!result.success()) {
             logger.error("Failed to execute kill command: {}", result.stdErr());
@@ -132,7 +126,7 @@ public final class DockerAPI {
     }
 
     public boolean removeContainerCmd(String id) {
-        String removeCommand = getDockerCommand() + " rm " + id;
+        String removeCommand = "docker rm " + id;
         var result = ExecuteCmd.runCommand(removeCommand);
         if (!result.success()) {
             logger.error("Failed to execute remove command: {}", result.stdErr());
@@ -164,16 +158,12 @@ public final class DockerAPI {
     }
 
     private void checkDockerExistence() {
-        String dockerCommand = getDockerCommand();
+        String dockerCommand = "docker ";
         var result = ExecuteCmd.runCommand(dockerCommand + "info");
-        if (result.exitCode() != 0)
+        if (!result.success())
             throw new IllegalArgumentException("Could not connect to Docker: " + result.stdErr());
         var version = result.stdOut().lines().filter(it -> it.contains("Server Version:")).findFirst().orElse("Server Version: Unknown");
         logger.info("Connected to Docker: {}", version);
-    }
-
-    private String getDockerCommand() {
-        return host == null ? "docker " : ("docker -H " + host + " ");
     }
 
     private List<Map<String, String>> parseDockerLines(String allLines) {
