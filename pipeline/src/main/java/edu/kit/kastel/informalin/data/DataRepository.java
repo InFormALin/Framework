@@ -1,6 +1,9 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.data;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +16,8 @@ import java.util.Optional;
  * @author Jan Keim
  */
 public class DataRepository {
+    private static final Logger logger = LoggerFactory.getLogger(DataRepository.class);
+
     private final Map<String, PipelineStepData> data;
 
     public DataRepository() {
@@ -32,8 +37,9 @@ public class DataRepository {
     public <T extends PipelineStepData> Optional<T> getData(String identifier, Class<T> clazz) {
         var possibleData = data.get(identifier);
         if (possibleData != null) {
-            return possibleData.convertToClass(clazz);
+            return possibleData.asPipelineStepData(clazz);
         }
+        logger.warn("Could not find data for id '{}'", identifier);
         return Optional.empty();
     }
 
@@ -45,7 +51,9 @@ public class DataRepository {
      * @param pipelineStepData Data that should be saved
      */
     public void addData(String identifier, PipelineStepData pipelineStepData) {
-        data.put(identifier, pipelineStepData);
+        if (data.put(identifier, pipelineStepData) != null) {
+            logger.warn("Overriding data with identifier '{}'", identifier);
+        }
     }
 
 }

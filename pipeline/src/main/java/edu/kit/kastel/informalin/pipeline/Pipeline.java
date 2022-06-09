@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class that represents a pipeline that can consist of multiple {@link AbstractPipelineStep AbstractPipelineSteps}.
@@ -70,5 +71,10 @@ public class Pipeline extends AbstractPipelineStep {
                 logger.info("Finished {} - {} in {}", this.getId(), pipelineStep.getId(), durationString);
             }
         }
+    }
+
+    @Override
+    protected void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration) {
+        this.pipelineSteps.forEach(it -> it.applyConfiguration(additionalConfiguration));
     }
 }

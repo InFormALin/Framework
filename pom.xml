@@ -2,44 +2,74 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>edu.kit.kastel.informalin</groupId>
-  <artifactId>framework</artifactId>
+  <groupId>io.github.informalin.framework</groupId>
+  <artifactId>parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
 
   <name>InFormALin Framework</name>
+  <description>The goal of this project is to connect informal artifacts like architecture documentation and formal
+        artifacts like models. The InFormALin Framework is actively developed by researchers of the Modelling for
+        Continuous Software Engineering (MCSE) group of KASTEL - Institute of Information Security and Dependability at
+        the KIT. This work was supported by funding from the topic Engineering Secure Systems of the Helmholtz
+        Association (HGF) and by KASTEL Security Research Labs (46.23.01).</description>
   <url>https://github.com/InFormALin/Framework</url>
 
-  <modules>
-    <module>configuration</module>
-    <module>common</module>
-    <module>models</module>
-    <module>java-model-extractor</module>
-    <module>pipeline</module>
-  </modules>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>Hossiphi</id>
+      <name>Sophie Corallo</name>
+      <email>sophie.schulz@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_sophie_schulz.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+    <developer>
+      <id>dfuchss</id>
+      <name>Dominik Fuchss</name>
+      <email>dominik.fuchss@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_dominik_fuchss.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+    <developer>
+      <id>Gram21</id>
+      <name>Jan Keim</name>
+      <email>jan.keim@kit.edu</email>
+      <url>https://mcse.kastel.kit.edu/staff_Keim_Jan.php</url>
+      <organization>KASTEL</organization>
+      <organizationUrl>https://mcse.kastel.kit.edu/</organizationUrl>
+      <timezone>GMT+1</timezone>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/InFormALin/Framework.git</connection>
+    <developerConnection>scm:git:ssh://github.com:InFormALin/Framework.git</developerConnection>
+    <url>http://github.com/InFormALin/Framework/tree/main</url>
+  </scm>
 
   <issueManagement>
     <system>GitHub Issues</system>
     <url>https://github.com/InFormALin/Framework/issues</url>
   </issueManagement>
-
   <distributionManagement>
-    <repository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
-    </repository>
     <snapshotRepository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
-
   <properties>
-    <revision>0.2-SNAPSHOT</revision>
+    <revision>0.8-SNAPSHOT</revision>
     <java.version>17</java.version>
-    <skipTests>false</skipTests>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
     <sonar.organization>informalin</sonar.organization>
@@ -47,17 +77,17 @@
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
 
     <slf4j.version>1.7.36</slf4j.version>
-    <spotless.version>2.22.1</spotless.version>
+    <spotless.version>2.22.6</spotless.version>
     <junit.version>5.8.2</junit.version>
     <eclipse-collections.version>11.0.0</eclipse-collections.version>
-    <jackson.version>2.13.2</jackson.version>
+    <jackson.version>2.13.3</jackson.version>
     <javaparser.version>3.24.2</javaparser.version>
+    <error-prone.version>2.10.0</error-prone.version>
 
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven.compiler.release>${java.version}</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
   </properties>
 
   <dependencyManagement>
@@ -93,6 +123,11 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>log4j-over-slf4j</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
         <version>${junit.version}</version>
@@ -105,38 +140,58 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-junit-jupiter</artifactId>
-        <version>4.5.0</version>
+        <version>4.6.1</version>
         <scope>test</scope>
       </dependency>
 
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-annotations</artifactId>
         <version>${jackson.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
         <version>${jackson.version}</version>
       </dependency>
 
-      <!-- Informalin -->
+      <!-- InFormALin -->
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
         <version>${revision}</version>
       </dependency>
       <dependency>
-        <groupId>edu.kit.kastel.informalin</groupId>
+        <groupId>io.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.informalin.framework</groupId>
+        <artifactId>pipeline</artifactId>
+        <version>${revision}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.github.informalin.framework</groupId>
+        <artifactId>docker</artifactId>
         <version>${revision}</version>
       </dependency>
     </dependencies>
@@ -150,13 +205,6 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>github</id>
-      <name>GitHub InFormALin Apache Maven Packages</name>
-      <url>https://maven.pkg.github.com/InFormALin/Framework</url>
-    </repository>
-  </repositories>
   <build>
     <pluginManagement>
       <plugins>
@@ -165,9 +213,118 @@
           <artifactId>maven-assembly-plugin</artifactId>
           <version>3.3.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.0.0-M7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-gpg-plugin</artifactId>
+          <version>3.0.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <configuration>
+            <release>${java.version}</release>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+            <encoding>UTF-8</encoding>
+            <fork>true</fork>
+            <compilerArgs>
+              <arg>-XDcompilePolicy=simple</arg>
+              <arg>-Xplugin:ErrorProne</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED</arg>
+              <arg>-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED</arg>
+              <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED</arg>
+              <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
+            </compilerArgs>
+            <meminitial>128m</meminitial>
+            <maxmem>512m</maxmem>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_core</artifactId>
+                <version>${error-prone.version}</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>flatten-maven-plugin</artifactId>
+          <version>1.2.7</version>
+          <configuration>
+            <updatePomFile>true</updatePomFile>
+            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+          </configuration>
+          <executions>
+            <execution>
+              <id>flatten</id>
+              <goals>
+                <goal>flatten</goal>
+              </goals>
+              <phase>process-resources</phase>
+            </execution>
+            <execution>
+              <id>flatten.clean</id>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+              <phase>clean</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.0.0-M7</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+              <phase>integration-test</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <version>1.6.13</version>
+          <extensions>true</extensions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>com.diffplug.spotless</groupId>
         <artifactId>spotless-maven-plugin</artifactId>
@@ -198,6 +355,10 @@
               <!--suppress UnresolvedMavenProperty -->
               <file>${maven.multiModuleProjectDirectory}/license-header</file>
             </licenseHeader>
+            <importOrder>
+              <!--suppress UnresolvedMavenProperty -->
+              <file>${maven.multiModuleProjectDirectory}/spotless.importorder</file>
+            </importOrder>
           </java>
           <pom>
             <sortPom>
@@ -237,12 +398,79 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M6</version>
-        <configuration>
-          <skipTests>${skipTests}</skipTests>
-        </configuration>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>deployment</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <modules>
+        <module>configuration</module>
+        <module>common</module>
+        <module>models</module>
+        <module>pipeline</module>
+        <module>docker</module>
+      </modules>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+                <phase>verify</phase>
+                <configuration>
+                  <keyname>15B81B60293634F6616070302CF31D214A49E3B2</keyname>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>module-defaults</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>configuration</module>
+        <module>common</module>
+        <module>models</module>
+        <module>java-model-extractor</module>
+        <module>pipeline</module>
+        <module>docker</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

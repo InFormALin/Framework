@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Example implementation of {@link AbstractPipelineStep}
@@ -65,5 +66,10 @@ public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {
             tokens = textData.getTokens();
         }
         return tokens;
+    }
+
+    @Override
+    protected void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration) {
+        // NOP
     }
 }
