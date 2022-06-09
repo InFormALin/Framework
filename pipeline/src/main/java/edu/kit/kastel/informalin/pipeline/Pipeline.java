@@ -2,8 +2,6 @@
 package edu.kit.kastel.informalin.pipeline;
 
 import edu.kit.kastel.informalin.data.DataRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.Instant;
