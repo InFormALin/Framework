@@ -1,14 +1,16 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.common;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.kit.kastel.informalin.framework.common.tuple.Pair;
 
 /**
  * A helper class that executed cmd line commands.
@@ -44,31 +46,51 @@ public final class ExecuteCmd {
     public static ExecuteResult runCommand(String command, int waitForResponseInSeconds) {
         try {
             Process process = Runtime.getRuntime().exec(command);
-
-            String stdOut = readStream(process.getInputStream());
-            String stdErr = readStream(process.getErrorStream());
+            Pair<Pointer<String>, Pointer<String>> outputs = new Pair<>(new Pointer<>(), new Pointer<>());
+            var threads = createConsumerThreads(outputs, process);
 
             boolean exited = process.waitFor(waitForResponseInSeconds, TimeUnit.SECONDS);
+
             if (!exited) {
+                threads.first().interrupt();
+                threads.second().interrupt();
                 logger.error("Timout in #runCommand(String, int)");
                 return new ExecuteResult(Integer.MIN_VALUE, null, "Timeout! Cancelling request!");
             }
-            return new ExecuteResult(process.exitValue(), stdOut, stdErr);
+
+            threads.first().join();
+            threads.second().join();
+
+            return new ExecuteResult(process.exitValue(), outputs.first().getP(), outputs.second().getP());
         } catch (IOException | InterruptedException e) {
             logger.error(e.getMessage(), e);
             return new ExecuteResult(Integer.MIN_VALUE, null, e.getMessage());
         }
     }
 
-    private static String readStream(InputStream data) {
-        if (data == null)
-            return null;
+    private static Pair<Thread, Thread> createConsumerThreads(Pair<Pointer<String>, Pointer<String>> outputs, Process process) {
+        var outputThread = createConsumerThread(outputs.first(), process.getInputStream());
+        var errorThread = createConsumerThread(outputs.second(), process.getErrorStream());
+        return new Pair<>(outputThread, errorThread);
+    }
 
-        try (var scanner = new Scanner(data, StandardCharsets.UTF_8).useDelimiter("\\A")) {
-            if (!scanner.hasNext())
-                return null;
-            return scanner.next();
-        }
+    private static Thread createConsumerThread(Pointer<String> outputs, InputStream inputStream) {
+        Thread runner = new Thread(() -> {
+            StringBuilder builder = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                char[] buffer = new char[512];
+                int size;
+                while ((size = reader.read(buffer)) != -1) {
+                    builder.append(buffer, 0, size);
+                }
+            } catch (IOException e) {
+                logger.error(e.getMessage(), e);
+            }
+            outputs.setP(builder.toString());
+        });
+        runner.setDaemon(true);
+        runner.start();
+        return runner;
     }
 
     /**
