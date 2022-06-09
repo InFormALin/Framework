@@ -19,8 +19,6 @@ import java.util.Map;
  * @author Jan Keim
  */
 public class Pipeline extends AbstractPipelineStep {
-    private static final Logger logger = LoggerFactory.getLogger(Pipeline.class);
-
     private final List<AbstractPipelineStep> pipelineSteps;
 
     /**
