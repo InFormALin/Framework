@@ -355,6 +355,10 @@
               <!--suppress UnresolvedMavenProperty -->
               <file>${maven.multiModuleProjectDirectory}/license-header</file>
             </licenseHeader>
+            <importOrder>
+              <!--suppress UnresolvedMavenProperty -->
+              <file>${maven.multiModuleProjectDirectory}/spotless.importorder</file>
+            </importOrder>
           </java>
           <pom>
             <sortPom>
