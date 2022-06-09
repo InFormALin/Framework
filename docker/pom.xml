@@ -9,23 +9,10 @@
 
   <artifactId>docker</artifactId>
   <name>Docker Handling in InFormALin</name>
-  <properties>
-    <docker-java.version>3.2.13</docker-java.version>
-  </properties>
   <dependencies>
     <dependency>
       <groupId>io.github.informalin.framework</groupId>
       <artifactId>common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.github.docker-java</groupId>
-      <artifactId>docker-java</artifactId>
-      <version>${docker-java.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.docker-java</groupId>
-      <artifactId>docker-java-transport-httpclient5</artifactId>
-      <version>${docker-java.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -36,6 +23,15 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
+      <version>5.1.3</version>
     </dependency>
   </dependencies>
 </project>
