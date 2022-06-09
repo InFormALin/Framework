@@ -5,6 +5,8 @@ import edu.kit.kastel.informalin.data.DataRepository;
 import edu.kit.kastel.informalin.data.impl.ProcessedTextData;
 import edu.kit.kastel.informalin.data.impl.TextData;
 import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
  * @author Jan Keim
  */
 public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {
+    private static final Logger logger = LoggerFactory.getLogger(ConcretePipelineStepTwoOne.class);
 
     private TextData textData;
     private ProcessedTextData processedTextData;
@@ -39,17 +42,19 @@ public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {
     @Override
     public void run() {
         fetchAndInitializeData();
-        System.out.println("Greetings from " + this.getClass().getSimpleName() + " with id " + getId());
+        logger.info("Greetings from {} with id {}", this.getClass().getSimpleName(), getId());
         List<String> tokens = getTokens();
         List<String> filteredTokens = new ArrayList<>();
+        StringBuilder outputBuilder = new StringBuilder();
         for (int i = 0; i < tokens.size(); i++) {
             if ((i & 1) == 0) {
                 String token = tokens.get(i);
                 filteredTokens.add(token);
-                System.out.print(" " + token);
+                outputBuilder.append(" ").append(token);
             }
         }
-        System.out.println("\n" + filteredTokens.size());
+        logger.info(outputBuilder.toString());
+        logger.info("{}", filteredTokens.size());
         processedTextData.setImportantTokens(filteredTokens);
 
     }
@@ -57,7 +62,7 @@ public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {
     private List<String> getTokens() {
         var tokens = processedTextData.getImportantTokens();
         if (tokens == null || tokens.isEmpty()) {
-            System.out.println("No preprocessedTextData, fetching textData.");
+            logger.debug("No preprocessedTextData, fetching textData.");
             tokens = textData.getTokens();
         }
         return tokens;

@@ -5,6 +5,8 @@ import edu.kit.kastel.informalin.data.DataRepository;
 import edu.kit.kastel.informalin.data.impl.ProcessedTextData;
 import edu.kit.kastel.informalin.data.impl.ResultData;
 import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  * @author Jan Keim
  */
 public class ConcretePipelineStepTwoTwo extends AbstractPipelineStep {
+    private static final Logger logger = LoggerFactory.getLogger(ConcretePipelineStepTwoTwo.class);
 
     private ProcessedTextData processedTextData;
     private ResultData resultData;
@@ -34,7 +37,7 @@ public class ConcretePipelineStepTwoTwo extends AbstractPipelineStep {
     @Override
     public void run() {
         fetchAndInitializeData();
-        System.out.println("Greetings from " + this.getClass().getSimpleName() + " with id " + getId());
+        logger.info("Greetings from {} with id {}", this.getClass().getSimpleName(), getId());
         var tokens = processedTextData.getImportantTokens();
         var tokenWithLength = tokens.stream().collect(Collectors.toMap(e -> e, String::length, (o1, o2) -> o1, TreeMap::new));
         var firstEntry = tokenWithLength.firstKey();
