@@ -9,6 +9,8 @@ import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoOne;
 import edu.kit.kastel.informalin.pipeline.impl.ConcretePipelineStepTwoTwo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -18,12 +20,13 @@ import java.util.List;
  * @author Jan Keim
  */
 class PipelineTest {
+    private static final Logger logger = LoggerFactory.getLogger(PipelineTest.class);
 
     @Test
     void pipelineDefinitionTest() {
         DataRepository dataRepository = new DataRepository();
         String text = "This is an example text containing multiple words.";
-        System.out.println("Input: \"" + text + "\"");
+        logger.info("Input: \"{}\"", text);
         TextData textData = new TextData(text);
         dataRepository.addData("Text", textData);
         Pipeline pipeline = new Pipeline("Main-Pipeline", dataRepository);
@@ -37,7 +40,7 @@ class PipelineTest {
         pipeline.run();
 
         var resultData = dataRepository.getData("ResultData", ResultData.class).orElseThrow();
-        System.out.println("Result: " + resultData.getResult());
+        logger.info("Result: {}", resultData.getResult());
         Assertions.assertNotNull(resultData);
     }
 }

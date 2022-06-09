@@ -4,6 +4,8 @@ package edu.kit.kastel.informalin.pipeline.impl;
 import edu.kit.kastel.informalin.data.DataRepository;
 import edu.kit.kastel.informalin.data.impl.TextData;
 import edu.kit.kastel.informalin.pipeline.AbstractPipelineStep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.function.Predicate;
  * @author Jan Keim
  */
 public class ConcretePipelineStepOne extends AbstractPipelineStep {
+    private static final Logger logger = LoggerFactory.getLogger(ConcretePipelineStepOne.class);
 
     private TextData textData;
     private final List<String> stopwords = List.of("is", "an", ".", "This");
@@ -30,7 +33,7 @@ public class ConcretePipelineStepOne extends AbstractPipelineStep {
     @Override
     public void run() {
         fetchData();
-        System.out.println("Greetings from " + this.getClass().getSimpleName() + " with id " + getId());
+        logger.info("Greetings from {} with id {}", this.getClass().getSimpleName(), getId());
         var text = textData.getText();
         var tokens = Arrays.stream(text.split(" ")).toList();
         tokens = tokens.stream().filter(Predicate.not(stopwords::contains)).toList();
