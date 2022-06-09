@@ -3,6 +3,8 @@ package edu.kit.kastel.informalin.pipeline;
 
 import edu.kit.kastel.informalin.data.DataRepository;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,6 @@ import java.util.Map;
  * @author Jan Keim
  */
 public class Pipeline extends AbstractPipelineStep {
-
     private final List<AbstractPipelineStep> pipelineSteps;
 
     /**
@@ -54,7 +55,17 @@ public class Pipeline extends AbstractPipelineStep {
     @Override
     public void run() {
         for (var pipelineStep : this.pipelineSteps) {
+            logger.info("Starting {} - {}", this.getId(), pipelineStep.getId());
+            var start = Instant.now();
+
             pipelineStep.run();
+
+            if (logger.isInfoEnabled()) {
+                var end = Instant.now();
+                var duration = Duration.between(start, end);
+                String durationString = String.format("%01d.%03d s", duration.toSecondsPart(), duration.toMillisPart());
+                logger.info("Finished {} - {} in {}", this.getId(), pipelineStep.getId(), durationString);
+            }
         }
     }
 
