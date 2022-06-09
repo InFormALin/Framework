@@ -2,6 +2,7 @@
 package edu.kit.kastel.informalin.framework.docker;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,10 @@ import edu.kit.kastel.informalin.framework.common.ExecuteCmd;
 @SuppressWarnings("java:S2629")
 public final class DockerAPI {
 
+    // Original Regex posted: https://stackoverflow.com/questions/39671641/regex-to-parse-docker-tag
+    @SuppressWarnings({ "java:S5998", "java:S5843" })
+    private static final Pattern IMAGE_REGEX = Pattern.compile(
+            "^(?:(?=[^:/]{1,253})(?!-)[a-zA-Z\\d-]{1,63}(?<!-)(?:\\.(?!-)[a-zA-Z\\d-]{1,63}(?<!-))*(?::\\d{1,5})?/)?((?![._-])[a-z\\d._-]*(?<![._-])(?:/(?![._-])[a-z\\d._-]*(?<![._-]))*)(?::(?![.-])[a-zA-Z\\d_.-]{1,128})?$");
     private static final Logger logger = LoggerFactory.getLogger(DockerAPI.class);
 
     private final ObjectMapper oom = new ObjectMapper();
@@ -40,6 +45,7 @@ public final class DockerAPI {
     }
 
     public boolean pullImageCmd(String image) {
+        ensureValidImageName(image);
         String pullCommand = "docker pull " + image;
         var result = ExecuteCmd.runCommand(pullCommand, 60 * 5);
         if (!result.success()) {
@@ -68,6 +74,8 @@ public final class DockerAPI {
     }
 
     public DockerImage inspectImageCmd(String image) {
+        ensureValidImageName(image);
+
         String inspectImageCommand = "docker image inspect " + image;
         var result = ExecuteCmd.runCommand(inspectImageCommand);
         if (!result.success()) {
@@ -93,6 +101,8 @@ public final class DockerAPI {
     }
 
     public String createContainer(String name, String image, DockerPortBind dpb) {
+        ensureValidImageName(image);
+
         if (!dpb.valid()) {
             logger.error("DockerPortBind is invalid!");
             throw new IllegalArgumentException("Invalid Docker Port Binding");
@@ -116,6 +126,7 @@ public final class DockerAPI {
     }
 
     public boolean killContainerCmd(String id) {
+        ensureValidId(id);
         String killCommand = "docker kill " + id;
         var result = ExecuteCmd.runCommand(killCommand);
         if (!result.success()) {
@@ -126,6 +137,7 @@ public final class DockerAPI {
     }
 
     public boolean removeContainerCmd(String id) {
+        ensureValidId(id);
         String removeCommand = "docker rm " + id;
         var result = ExecuteCmd.runCommand(removeCommand);
         if (!result.success()) {
@@ -135,31 +147,18 @@ public final class DockerAPI {
         return true;
     }
 
-    public record DockerImage(String repository, String tag, List<Integer> exposedPorts) {
-        public boolean isNone() {
-            return this.repository.equals("<none>") && this.tag.equals("<none>");
-        }
-
-        public String repositoryWithTag() {
-            return repository + ":" + tag;
-        }
+    private void ensureValidImageName(String image) {
+        if (image == null || !IMAGE_REGEX.matcher(image).matches())
+            throw new IllegalArgumentException("Provided Image Name is not valid!");
     }
 
-    public record DockerContainer(String id, String image, String status, String name) {
-        public boolean isRunning() {
-            return status().startsWith("Up");
-        }
-    }
-
-    public record DockerPortBind(int hostPort, int containerPort, boolean wildcard) {
-        public boolean valid() {
-            return hostPort > 0 && containerPort > 0;
-        }
+    private void ensureValidId(String id) {
+        if (id == null || !id.matches("[A-Za-z0-9-_]+"))
+            throw new IllegalArgumentException("Provided ID is not valid!");
     }
 
     private void checkDockerExistence() {
-        String dockerCommand = "docker ";
-        var result = ExecuteCmd.runCommand(dockerCommand + "info");
+        var result = ExecuteCmd.runCommand("docker info");
         if (!result.success())
             throw new IllegalArgumentException("Could not connect to Docker: " + result.stdErr());
         var version = result.stdOut().lines().filter(it -> it.contains("Server Version:")).findFirst().orElse("Server Version: Unknown");

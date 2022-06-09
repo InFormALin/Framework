@@ -111,7 +111,7 @@ public class DockerManager {
         }
 
         int apiPort = getNextFreePort();
-        DockerAPI.DockerPortBind dpb = new DockerAPI.DockerPortBind(apiPort, port, false);
+        DockerPortBind dpb = new DockerPortBind(apiPort, port, false);
         String id = dockerAPI.createContainer(namespacePrefix + UUID.randomUUID(), image, dpb);
         logger.info("Created container {}", id);
 
@@ -179,7 +179,7 @@ public class DockerManager {
      */
     public List<String> getContainerIds() {
         var containers = this.dockerAPI.listContainersCmd(true);
-        return containers.stream().filter(c -> c.name() != null && c.name().startsWith(namespacePrefix)).map(DockerAPI.DockerContainer::id).toList();
+        return containers.stream().filter(c -> c.name() != null && c.name().startsWith(namespacePrefix)).map(DockerContainer::id).toList();
     }
 
     /**
