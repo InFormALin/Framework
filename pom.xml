@@ -77,7 +77,7 @@
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
 
     <slf4j.version>1.7.36</slf4j.version>
-    <spotless.version>2.22.6</spotless.version>
+    <spotless.version>2.22.8</spotless.version>
     <junit.version>5.8.2</junit.version>
     <eclipse-collections.version>11.0.0</eclipse-collections.version>
     <jackson.version>2.13.3</jackson.version>
