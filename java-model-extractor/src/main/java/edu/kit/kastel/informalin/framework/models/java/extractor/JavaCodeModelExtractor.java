@@ -7,14 +7,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import edu.kit.kastel.informalin.framework.models.java.JavaProject;
-import edu.kit.kastel.informalin.framework.models.java.extractor.visitors.JavaFileVisitor;
 import org.apache.commons.cli.*;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.kit.kastel.informalin.framework.common.JsonUtils;
+import edu.kit.kastel.informalin.framework.models.java.JavaProject;
+import edu.kit.kastel.informalin.framework.models.java.extractor.visitors.JavaFileVisitor;
 
 /**
  * @author Jan Keim
@@ -79,16 +78,8 @@ public class JavaCodeModelExtractor {
     }
 
     private static void saveToJSON(JavaProject javaProject, File outputFile) {
-        ObjectMapper oom = new ObjectMapper();
-        oom.setVisibility(oom.getSerializationConfig()
-                .getDefaultVisibilityChecker() //
-                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)//
-                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)//
-                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)//
-                .withIsGetterVisibility(JsonAutoDetect.Visibility.NONE));
-
         try {
-            oom.writeValue(outputFile, javaProject);
+            JsonUtils.createObjectMapper().writeValue(outputFile, javaProject);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }

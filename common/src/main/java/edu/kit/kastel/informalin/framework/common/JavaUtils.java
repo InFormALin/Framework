@@ -2,7 +2,9 @@
 package edu.kit.kastel.informalin.framework.common;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public final class JavaUtils {
@@ -17,6 +19,14 @@ public final class JavaUtils {
             copyMap.put(entry.getKey(), copy.apply(entry.getValue()));
         }
         return copyMap;
+    }
+
+    public static <K, V> Map<V, Set<K>> reverseMap(Map<K, V> map) {
+        Map<V, Set<K>> result = new HashMap<>();
+        for (var entry : map.entrySet()) {
+            result.computeIfAbsent(entry.getValue(), k -> new HashSet<>()).add(entry.getKey());
+        }
+        return result;
     }
 
 }
