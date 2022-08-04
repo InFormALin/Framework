@@ -85,7 +85,7 @@ public final class DockerAPI {
         try {
             var configInformationNode = oom.readTree(result.stdOut()).get(0);
             var repoTags = configInformationNode.get("RepoTags").get(0).asText().split(":");
-            var containerConfig = configInformationNode.get("ContainerConfig");
+            var containerConfig = configInformationNode.get("Config");
             if (!containerConfig.hasNonNull("ExposedPorts")) {
                 return new DockerImage(repoTags[0], repoTags[1], List.of());
             }
