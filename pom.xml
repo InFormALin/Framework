@@ -77,11 +77,11 @@
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
 
     <slf4j.version>1.7.36</slf4j.version>
-    <spotless.version>2.24.0</spotless.version>
+    <spotless.version>2.24.1</spotless.version>
     <junit.version>5.9.0</junit.version>
     <eclipse-collections.version>11.1.0</eclipse-collections.version>
     <jackson.version>2.13.3</jackson.version>
-    <javaparser.version>3.24.2</javaparser.version>
+    <javaparser.version>3.24.4</javaparser.version>
     <error-prone.version>2.10.0</error-prone.version>
     <mockito.version>4.6.1</mockito.version>
 
