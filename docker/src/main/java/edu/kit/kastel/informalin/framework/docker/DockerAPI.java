@@ -1,7 +1,6 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.docker;
 
-import java.net.URI;
 import java.util.*;
 
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public final class DockerAPI {
         DockerClient dockerInstance = null;
         try {
             DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
-            DockerHttpClient dhc = new ZerodepDockerHttpClient.Builder().dockerHost(URI.create("tcp://127.0.0.1:2375")).build();
+            DockerHttpClient dhc = new ZerodepDockerHttpClient.Builder().dockerHost(config.getDockerHost()).build();
             dockerInstance = DockerClientImpl.getInstance(config, dhc);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
