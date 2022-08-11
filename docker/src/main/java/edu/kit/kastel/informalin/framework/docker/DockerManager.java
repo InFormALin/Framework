@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class manages the docker containers used in InFormALin.
- * 
+ *
  * @author Dominik Fuchss
  */
 public class DockerManager {
@@ -29,7 +29,7 @@ public class DockerManager {
 
     /**
      * Create the manager with a container name prefix.
-     * 
+     *
      * @param namespacePrefix the container name prefix
      */
     public DockerManager(String namespacePrefix) {
@@ -53,7 +53,7 @@ public class DockerManager {
 
     /**
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
-     * 
+     *
      * @param image the image name (with or without tag)
      * @return the container information
      */
@@ -62,7 +62,6 @@ public class DockerManager {
     }
 
     /**
-     *
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
      *
      * @param image                    the image name (with or without tag)
@@ -76,7 +75,7 @@ public class DockerManager {
 
     /**
      * Create a new container and bind the api port to {@code 127.0.0.1:$apiPort}.
-     * 
+     *
      * @param image                    the image name (with or without tag)
      * @param targetPort               the API port to be exposed (if 0 or negative, the port will be determined
      *                                 automatically)
@@ -142,8 +141,8 @@ public class DockerManager {
     }
 
     /**
-     * Shutdown and cleanup an container by id.
-     * 
+     * Shutdown and cleanup a container by id.
+     *
      * @param id the container id
      */
     public void shutdown(String id) {
@@ -163,7 +162,7 @@ public class DockerManager {
         var containers = this.dockerAPI.listContainersCmd(true);
         for (var container : containers) {
             var name = container.name();
-            if (name != null && name.startsWith(namespacePrefix)) {
+            if (name != null && name.startsWith("/" + namespacePrefix)) {
                 logger.info("Shutting down {}", container);
                 if (container.isRunning())
                     this.dockerAPI.killContainerCmd(container.id());
@@ -174,17 +173,17 @@ public class DockerManager {
 
     /**
      * Get all container ids managed by this docker manager.
-     * 
+     *
      * @return all container ids
      */
     public List<String> getContainerIds() {
         var containers = this.dockerAPI.listContainersCmd(true);
-        return containers.stream().filter(c -> c.name() != null && c.name().startsWith(namespacePrefix)).map(DockerContainer::id).toList();
+        return containers.stream().filter(c -> c.name() != null && c.name().startsWith("/" + namespacePrefix)).map(DockerContainer::id).toList();
     }
 
     /**
      * Returns a free local unprivileged port.
-     * 
+     *
      * @return the free port
      * @throws IllegalStateException if no port is available
      */
