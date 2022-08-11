@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -16,7 +17,6 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
-@SuppressWarnings("java:S2629")
 public final class DockerAPI {
 
     private static final Logger logger = LoggerFactory.getLogger(DockerAPI.class);
@@ -63,23 +63,25 @@ public final class DockerAPI {
     }
 
     public List<DockerContainer> listContainersCmd(boolean showAll) {
-
+        List<Container> containers = new ArrayList<>();
         try {
-            var containers = docker.listContainersCmd().withShowAll(showAll).exec();
-            return containers.stream()
-                    .map(container -> new DockerContainer(container.getId(), container.getImage(), container.getStatus(), container.getNames()[0]))
-                    .toList();
+            containers = docker.listContainersCmd().withShowAll(showAll).exec();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            return List.of();
         }
+        return containers.stream()
+                .map(container -> new DockerContainer(container.getId(), container.getImage(), container.getStatus(), container.getNames()[0]))
+                .toList();
     }
 
     public DockerImage inspectImageCmd(String image) {
         try {
             var imageInspect = docker.inspectImageCmd(image).exec();
-            return new DockerImage(Objects.requireNonNull(imageInspect.getRepoTags()).get(0), imageInspect.getRepoTags().get(0),
-                    Arrays.stream(Objects.requireNonNull(imageInspect.getConfig()).getExposedPorts()).map(ExposedPort::getPort).toList());
+            return new DockerImage(//
+                    Objects.requireNonNull(imageInspect.getRepoTags()).get(0), //
+                    imageInspect.getRepoTags().get(0), //
+                    Arrays.stream(Objects.requireNonNull(imageInspect.getConfig()).getExposedPorts()).map(ExposedPort::getPort).toList() //
+            );
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
@@ -92,13 +94,12 @@ public final class DockerAPI {
             throw new IllegalArgumentException("Invalid Docker Port Binding");
         }
 
-        try {
-            var binding = (dpb.wildcard() ? "0.0.0.0:" : "127.0.0.1:") + dpb.hostPort() + ":" + dpb.containerPort();
-            try (var command = docker.createContainerCmd(image)) {
-                var container = command.withName(name).withHostConfig(HostConfig.newHostConfig().withPortBindings(PortBinding.parse(binding))).exec();
-                docker.startContainerCmd(container.getId()).exec();
-                return container.getId();
-            }
+        var binding = (dpb.wildcard() ? "0.0.0.0:" : "127.0.0.1:") + dpb.hostPort() + ":" + dpb.containerPort();
+
+        try (var command = docker.createContainerCmd(image)) {
+            var container = command.withName(name).withHostConfig(HostConfig.newHostConfig().withPortBindings(PortBinding.parse(binding))).exec();
+            docker.startContainerCmd(container.getId()).exec();
+            return container.getId();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return null;
@@ -106,7 +107,6 @@ public final class DockerAPI {
     }
 
     public boolean killContainerCmd(String id) {
-        ensureValidId(id);
         try {
             docker.killContainerCmd(id).exec();
             return true;
@@ -117,7 +117,6 @@ public final class DockerAPI {
     }
 
     public boolean removeContainerCmd(String id) {
-        ensureValidId(id);
         try {
             docker.removeContainerCmd(id).exec();
             return true;
@@ -127,20 +126,10 @@ public final class DockerAPI {
         }
     }
 
-    private void ensureValidId(String id) {
-        if (id == null || !id.matches("[A-Za-z0-9-_]+"))
-            throw new IllegalArgumentException("Provided ID is not valid!");
-    }
-
     private void checkDockerExistence() {
         if (docker == null)
             throw new IllegalArgumentException("Could not connect to Docker");
-        try {
-            var version = docker.versionCmd().exec();
-            logger.info("Connected to Docker: {}", version);
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalArgumentException(e);
-        }
+        var version = docker.versionCmd().exec();
+        logger.info("Connected to Docker: {}", version);
     }
 }
