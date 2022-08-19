@@ -20,11 +20,11 @@ public final class PackagedElement {
     @XMLList(name = "ownedOperation", elementType = OwnedOperation.class)
     private List<OwnedOperation> ownedOperations;
 
-    @XMLList(name = "interfaceRealization", elementType = InterfaceRealization.class)
-    private List<InterfaceRealization> interfaceRealizations;
+    @XMLList(name = "interfaceRealization", elementType = Reference.class)
+    private List<Reference> interfaceRealizations;
 
-    @XMLList(name = "packagedElement", elementType = Usage.class)
-    private List<Usage> usages;
+    @XMLList(name = "packagedElement", elementType = Reference.class)
+    private List<Reference> usages;
 
     public String getName() {
         return name;
@@ -46,11 +46,11 @@ public final class PackagedElement {
         return ownedOperations;
     }
 
-    public List<InterfaceRealization> getInterfaceRealizations() {
+    public List<Reference> getInterfaceRealizations() {
         return interfaceRealizations;
     }
 
-    public List<Usage> getUsages() {
+    public List<Reference> getUsages() {
         return usages;
     }
 }

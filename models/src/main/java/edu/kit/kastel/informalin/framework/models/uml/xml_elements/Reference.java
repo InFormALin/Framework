@@ -5,7 +5,7 @@ import org.fuchss.xmlobjectmapper.annotation.XMLClass;
 import org.fuchss.xmlobjectmapper.annotation.XMLValue;
 
 @XMLClass
-public final class InterfaceRealization {
+public final class Reference {
     @XMLValue(name = "xmi:id")
     private String id;
     @XMLValue

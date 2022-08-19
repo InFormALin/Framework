@@ -5,10 +5,9 @@ import java.io.*;
 
 import org.fuchss.xmlobjectmapper.XML2Object;
 
-import edu.kit.kastel.informalin.framework.models.uml.xml_elements.InterfaceRealization;
 import edu.kit.kastel.informalin.framework.models.uml.xml_elements.OwnedOperation;
 import edu.kit.kastel.informalin.framework.models.uml.xml_elements.PackagedElement;
-import edu.kit.kastel.informalin.framework.models.uml.xml_elements.Usage;
+import edu.kit.kastel.informalin.framework.models.uml.xml_elements.Reference;
 
 public class UMLModel {
     private UMLModelRoot model;
@@ -31,7 +30,7 @@ public class UMLModel {
 
     private void load(InputStream repositoryStream) throws ReflectiveOperationException, IOException {
         XML2Object xml2Object = new XML2Object();
-        xml2Object.registerClasses(UMLModelRoot.class, PackagedElement.class, OwnedOperation.class, InterfaceRealization.class, Usage.class);
+        xml2Object.registerClasses(UMLModelRoot.class, PackagedElement.class, OwnedOperation.class, Reference.class);
         model = xml2Object.parseXML(repositoryStream, UMLModelRoot.class);
         model.init();
     }
