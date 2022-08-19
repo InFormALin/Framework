@@ -12,7 +12,7 @@ import edu.kit.kastel.informalin.framework.models.uml.xml_elements.Reference;
 public class UMLModel {
     private UMLModelRoot model;
 
-    public UMLModel(File umlModel) throws FileNotFoundException {
+    public UMLModel(File umlModel) throws IOException {
         this(new FileInputStream(umlModel));
     }
 

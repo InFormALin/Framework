@@ -7,9 +7,12 @@ import org.fuchss.xmlobjectmapper.annotation.XMLClass;
 import org.fuchss.xmlobjectmapper.annotation.XMLList;
 
 import edu.kit.kastel.informalin.framework.models.uml.xml_elements.PackagedElement;
+import org.fuchss.xmlobjectmapper.annotation.XMLValue;
 
 @XMLClass(name = "uml:Model")
 public final class UMLModelRoot {
+    @XMLValue(name = "xmi:id")
+    private String id;
     @XMLList(name = "packagedElement", elementType = PackagedElement.class)
     private List<PackagedElement> interfacesAndComponents;
 
@@ -37,5 +40,9 @@ public final class UMLModelRoot {
 
     public List<UMLInterface> getInterfaces() {
         return interfaces;
+    }
+
+    public String getId() {
+        return id;
     }
 }
