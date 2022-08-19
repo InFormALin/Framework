@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class manages the docker containers used in InFormALin.
- *
- * @author Dominik Fuchss
  */
 public class DockerManager {
     private static final Logger logger = LoggerFactory.getLogger(DockerManager.class);

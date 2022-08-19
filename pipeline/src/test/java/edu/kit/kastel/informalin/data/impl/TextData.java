@@ -8,8 +8,6 @@ import java.util.Objects;
 
 /**
  * Example {@link PipelineStepData}
- * 
- * @author Jan Keim
  */
 public class TextData implements PipelineStepData {
     private final String text;

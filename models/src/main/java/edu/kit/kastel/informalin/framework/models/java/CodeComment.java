@@ -6,9 +6,6 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * @author Jan Keim
- */
 public class CodeComment implements Serializable {
     @JsonProperty
     private String type;

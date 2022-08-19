@@ -7,8 +7,6 @@ import edu.kit.kastel.informalin.framework.configuration.AbstractConfigurable;
 /**
  * This class represents an abstract pipeline step and defines the core functionality. Together with {@link Pipeline}
  * and concrete implementations of this class represents a composite pattern.
- * 
- * @author Jan Keim
  */
 public abstract class AbstractPipelineStep extends AbstractConfigurable {
     private final String id;

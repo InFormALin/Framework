@@ -8,8 +8,6 @@ import edu.kit.kastel.informalin.framework.models.pcm.PCMComponent;
 
 /**
  * This interface provides necessary methods to identify links between Java models and PCM models.
- * 
- * @author Dominik Fuchss
  */
 public interface JavaPCMConnector {
     Set<JavaClassOrInterface> getClassesThatBelongToComponent(PCMComponent component);

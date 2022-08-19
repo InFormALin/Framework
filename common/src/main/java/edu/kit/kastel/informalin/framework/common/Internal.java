@@ -6,8 +6,6 @@ import java.lang.annotation.*;
 /**
  * Marks a method or class as only for internal use. Classes and methods that are marked with this annotation are
  * subject of change.
- * 
- * @author Dominik Fuchss
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

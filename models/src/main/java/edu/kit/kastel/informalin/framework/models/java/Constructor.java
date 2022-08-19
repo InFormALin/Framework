@@ -7,9 +7,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javaparser.ast.body.ConstructorDeclaration;
 
-/**
- * @author Jan Keim
- */
 public class Constructor implements Serializable {
 
     private String identifier;

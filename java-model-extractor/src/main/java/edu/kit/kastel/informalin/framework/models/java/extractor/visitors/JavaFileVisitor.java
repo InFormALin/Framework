@@ -14,9 +14,6 @@ import java.util.UUID;
 import com.github.javaparser.StaticJavaParser;
 import edu.kit.kastel.informalin.framework.models.java.JavaProject;
 
-/**
- * @author Jan Keim
- */
 public class JavaFileVisitor implements FileVisitor<Path> {
     private static final String JAVA_FILE_ENDING = ".java";
 
