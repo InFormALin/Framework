@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 class PCMModelTest {
-    private static final String PATH_TO_MODEL = "src/test/resources/benchmark/mediastore/original_model/ms.repository";
+    private static final String PATH_TO_MODEL = "src/test/resources/benchmark/mediastore/pcm/ms.repository";
 
     @Test
     void simpleLoad() throws IOException {
