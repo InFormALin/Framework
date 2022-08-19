@@ -16,7 +16,7 @@ import edu.kit.kastel.informalin.framework.models.java.JavaProject;
 import edu.kit.kastel.informalin.framework.models.java.extractor.visitors.JavaFileVisitor;
 
 /**
- * @author Jan Keim
+ * This class provides a CLI to extract a Java Code Model from Java Projects.
  */
 public class JavaCodeModelExtractor {
     private static final Logger logger = LoggerFactory.getLogger(JavaCodeModelExtractor.class);

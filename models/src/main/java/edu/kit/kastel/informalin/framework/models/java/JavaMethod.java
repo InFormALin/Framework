@@ -7,9 +7,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.javaparser.ast.body.MethodDeclaration;
 
-/**
- * @author Jan Keim
- */
 public class JavaMethod implements Serializable {
 
     private transient MethodDeclaration declaration;

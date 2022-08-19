@@ -16,8 +16,6 @@ import java.util.List;
 
 /**
  * Test that defines an example pipeline and executes it.
- * 
- * @author Jan Keim
  */
 class PipelineTest {
     private static final Logger logger = LoggerFactory.getLogger(PipelineTest.class);

@@ -14,8 +14,6 @@ import java.util.Map;
 
 /**
  * Example implementation of {@link AbstractPipelineStep}
- * 
- * @author Jan Keim
  */
 public class ConcretePipelineStepTwoOne extends AbstractPipelineStep {
     private static final Logger logger = LoggerFactory.getLogger(ConcretePipelineStepTwoOne.class);

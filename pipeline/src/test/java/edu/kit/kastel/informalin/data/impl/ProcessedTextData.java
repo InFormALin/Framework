@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * Example {@link PipelineStepData}
- * 
- * @author Jan Keim
  */
 public class ProcessedTextData implements PipelineStepData {
     private List<String> importantTokens = null;
