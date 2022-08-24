@@ -19,7 +19,7 @@ public class Pipeline extends AbstractPipelineStep {
 
     /**
      * Constructs a Pipeline with the given id and {@link DataRepository}.
-     * 
+     *
      * @param id             id for the pipeline
      * @param dataRepository {@link DataRepository} that should be used for fetching and saving data
      */
@@ -30,7 +30,7 @@ public class Pipeline extends AbstractPipelineStep {
 
     /**
      * Constructs a Pipeline with the given id and {@link DataRepository}.
-     * 
+     *
      * @param id             id for the pipeline
      * @param dataRepository {@link DataRepository} that should be used for fetching and saving data
      * @param pipelineSteps  List of {@link AbstractPipelineStep} that should be added to the constructed pipeline
@@ -42,7 +42,7 @@ public class Pipeline extends AbstractPipelineStep {
 
     /**
      * Adds a {@link AbstractPipelineStep} to the execution list of this pipeline
-     * 
+     *
      * @param pipelineStep step that should be added
      * @return True, if the step was added successfully. Otherwise, returns false
      */
@@ -51,7 +51,8 @@ public class Pipeline extends AbstractPipelineStep {
     }
 
     @Override
-    public void run() {
+    public final void run() {
+        preparePipelineSteps();
         for (var pipelineStep : this.pipelineSteps) {
             logger.info("Starting {} - {}", this.getId(), pipelineStep.getId());
             var start = Instant.now();
@@ -65,6 +66,17 @@ public class Pipeline extends AbstractPipelineStep {
                 logger.info("Finished {} - {} in {}", this.getId(), pipelineStep.getId(), durationString);
             }
         }
+    }
+
+    /**
+     * This method is called at the start of running the pipeline. Within this method, the added PipelineSteps are prepared.
+     * Sub-classes of Pipeline can override it with special cases.
+     * It is recommended that you apply the Map from {@link #getLastAppliedConfiguration()} via {@link #applyConfiguration(Map)} to each pipeline step.
+     * You can do that on your own if you need special treatment or by default call {@link #delegateApplyConfigurationToInternalObjects(Map)}.
+     * The base version does apply the last configuration via the default call.
+     */
+    protected void preparePipelineSteps() {
+        delegateApplyConfigurationToInternalObjects(getLastAppliedConfiguration());
     }
 
     @Override
