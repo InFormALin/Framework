@@ -1,23 +1,25 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public abstract class AbstractConfigurable implements IConfigurable {
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public static final String CLASS_ATTRIBUTE_CONNECTOR = "::";
     public static final String KEY_VALUE_CONNECTOR = "=";
-
     public static final String LIST_SEPARATOR = ",";
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Map<String, String> lastAppliedConfiguration = new HashMap<>();
 
     protected final <E> List<E> findByClassName(List<String> selected, List<E> instances) {
         List<E> target = new ArrayList<>(0);
@@ -35,6 +37,12 @@ public abstract class AbstractConfigurable implements IConfigurable {
     public final void applyConfiguration(Map<String, String> additionalConfiguration) {
         applyConfiguration(additionalConfiguration, this.getClass());
         delegateApplyConfigurationToInternalObjects(additionalConfiguration);
+        this.lastAppliedConfiguration = additionalConfiguration;
+    }
+
+    @Override
+    public Map<String, String> getLastAppliedConfiguration() {
+        return lastAppliedConfiguration;
     }
 
     protected abstract void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration);
@@ -87,7 +95,7 @@ public abstract class AbstractConfigurable implements IConfigurable {
             return result.orElseThrow(() -> new IllegalArgumentException("Unknown Enum Constant " + value));
         }
 
-        if (List.class.isAssignableFrom(fieldsClass) && field.getGenericType()instanceof ParameterizedType parameterizedType) {
+        if (List.class.isAssignableFrom(fieldsClass) && field.getGenericType() instanceof ParameterizedType parameterizedType) {
             var generics = parameterizedType.getActualTypeArguments();
 
             if (generics != null && generics.length == 1 && generics[0] == String.class)
