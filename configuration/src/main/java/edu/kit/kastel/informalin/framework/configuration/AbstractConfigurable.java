@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +38,12 @@ public abstract class AbstractConfigurable implements IConfigurable {
     public final void applyConfiguration(Map<String, String> additionalConfiguration) {
         applyConfiguration(additionalConfiguration, this.getClass());
         delegateApplyConfigurationToInternalObjects(additionalConfiguration);
-        this.lastAppliedConfiguration = additionalConfiguration;
+        this.lastAppliedConfiguration = new HashMap<>(additionalConfiguration);
     }
 
     @Override
     public Map<String, String> getLastAppliedConfiguration() {
-        return lastAppliedConfiguration;
+        return Collections.unmodifiableMap(lastAppliedConfiguration);
     }
 
     protected abstract void delegateApplyConfigurationToInternalObjects(Map<String, String> additionalConfiguration);
