@@ -5,4 +5,6 @@ import java.util.Map;
 
 public interface IConfigurable {
     void applyConfiguration(Map<String, String> additionalConfiguration);
+
+    Map<String, String> getLastAppliedConfiguration();
 }
