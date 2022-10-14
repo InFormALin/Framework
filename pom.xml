@@ -68,7 +68,7 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <revision>0.10.0-SNAPSHOT</revision>
+    <revision>0.9.1</revision>
     <java.version>17</java.version>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
