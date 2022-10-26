@@ -83,7 +83,7 @@
     <jackson.version>2.13.4</jackson.version>
     <javaparser.version>3.24.4</javaparser.version>
     <error-prone.version>2.10.0</error-prone.version>
-    <mockito.version>4.8.0</mockito.version>
+    <mockito.version>4.8.1</mockito.version>
 
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
