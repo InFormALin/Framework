@@ -1,11 +1,12 @@
 /* Licensed under MIT 2022. */
 package edu.kit.kastel.informalin.framework.models.pcm;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.io.IOException;
 
 class PCMModelTest {
     private static final String PATH_TO_MODEL = "src/test/resources/benchmark/mediastore/pcm/ms.repository";
@@ -17,6 +18,18 @@ class PCMModelTest {
         var repo = pcmModel.getRepository();
         for (var component : repo.getComponents()) {
             Assertions.assertFalse(component.getProvided().isEmpty(), "Component " + component.getEntityName() + " has no provided interface");
+        }
+    }
+
+    @Test
+    void simpleLoadViaProvidedStream() throws IOException {
+        try (FileInputStream fis = new FileInputStream(PATH_TO_MODEL)) {
+            PCMModel pcmModel = new PCMModel(fis);
+            Assertions.assertNotNull(pcmModel.getRepository());
+            var repo = pcmModel.getRepository();
+            for (var component : repo.getComponents()) {
+                Assertions.assertFalse(component.getProvided().isEmpty(), "Component " + component.getEntityName() + " has no provided interface");
+            }
         }
     }
 }
