@@ -78,7 +78,7 @@
 
     <slf4j.version>2.0.6</slf4j.version>
     <spotless.version>2.29.0</spotless.version>
-    <junit.version>5.9.1</junit.version>
+    <junit.version>5.9.2</junit.version>
     <eclipse-collections.version>11.1.0</eclipse-collections.version>
     <jackson.version>2.14.1</jackson.version>
     <javaparser.version>3.24.10</javaparser.version>
