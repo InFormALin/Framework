@@ -4,7 +4,7 @@
 
   <groupId>io.github.informalin.framework</groupId>
   <artifactId>parent</artifactId>
-  <version>${revision}</version>
+  <version>0.11.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>InFormALin Framework</name>
@@ -68,7 +68,6 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <revision>0.11.0-SNAPSHOT</revision>
     <java.version>17</java.version>
 
     <sonar.projectKey>InFormALin_Framework</sonar.projectKey>
@@ -191,27 +190,27 @@
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
-        <version>${revision}</version>
+        <version>0.11.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
-        <version>${revision}</version>
+        <version>0.11.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
-        <version>${revision}</version>
+        <version>0.11.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>pipeline</artifactId>
-        <version>${revision}</version>
+        <version>0.11.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>docker</artifactId>
-        <version>${revision}</version>
+        <version>0.11.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
