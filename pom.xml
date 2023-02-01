@@ -54,6 +54,7 @@
   <scm>
     <connection>scm:git:git://github.com/InFormALin/Framework.git</connection>
     <developerConnection>scm:git:ssh://github.com:InFormALin/Framework.git</developerConnection>
+    <tag>HEAD</tag>
     <url>http://github.com/InFormALin/Framework/tree/main</url>
   </scm>
 
@@ -338,6 +339,14 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M7</version>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
