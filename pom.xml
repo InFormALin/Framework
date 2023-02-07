@@ -4,7 +4,7 @@
 
   <groupId>io.github.informalin.framework</groupId>
   <artifactId>parent</artifactId>
-  <version>0.11.1-SNAPSHOT</version>
+  <version>0.11.1</version>
   <packaging>pom</packaging>
 
   <name>InFormALin Framework</name>
@@ -54,7 +54,7 @@
   <scm>
     <connection>scm:git:git://github.com/InFormALin/Framework.git</connection>
     <developerConnection>scm:git:ssh://github.com:InFormALin/Framework.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.11.1</tag>
     <url>http://github.com/InFormALin/Framework/tree/main</url>
   </scm>
 
@@ -191,27 +191,27 @@
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>common</artifactId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.11.1</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>configuration</artifactId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.11.1</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>models</artifactId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.11.1</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>pipeline</artifactId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.11.1</version>
       </dependency>
       <dependency>
         <groupId>io.github.informalin.framework</groupId>
         <artifactId>docker</artifactId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.11.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
