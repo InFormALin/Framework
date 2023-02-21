@@ -11,7 +11,7 @@
   <name>Docker Handling in InFormALin</name>
 
   <properties>
-    <docker.version>3.2.14</docker.version>
+    <docker.version>3.3.0</docker.version>
   </properties>
   <dependencies>
     <dependency>
